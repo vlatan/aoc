@@ -63,5 +63,6 @@ func main() {
 	// fmt.Println()
 	// https://adventofcode.com/2023/day/9
 	day05.Part1()
+	day05.Part2()
 
 }

@@ -23,3 +23,12 @@ func parseFile(path string) [][]int {
 	}
 	return result
 }
+
+func allZeroes(lst []int) bool {
+	for _, num := range lst {
+		if num != 0 {
+			return false
+		}
+	}
+	return true
+}
