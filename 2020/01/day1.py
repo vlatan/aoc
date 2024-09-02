@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-with open('day1.txt', 'r') as file:
+with open("2020/01/day1.txt", "r") as file:
     nums = [int(line.strip()) for line in file]
 
 # part 1

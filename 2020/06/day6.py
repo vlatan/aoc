@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
-with open('day6.txt', 'r') as file:
-    data = ['' if line == '\n' else line.strip() for line in file] + ['']
+with open("2020/06/day6.txt", "r") as file:
+    data = ["" if line == "\n" else line.strip() for line in file] + [""]
 
 # part 1
 group, total = set(), 0

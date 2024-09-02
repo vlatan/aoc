@@ -2,13 +2,13 @@
 
 
 def main():
-    data = get_data('day9.txt')
+    data = get_data("2020/09/day9.txt")
     print(f"Part 1: {invalid_number(data)}")
     print(f"Part 2: {weakness(data)}")
 
 
 def get_data(filename):
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         return [int(line.strip()) for line in file]
 
 
@@ -43,5 +43,5 @@ def correct_sum(dataset, num):
     return False
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

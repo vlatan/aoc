@@ -4,30 +4,26 @@ import time
 
 
 def main():
-    rules, lines = get_data('test.txt')
-    # print(rules, end='\n\n')
-    # print(lines, end='\n\n')
-    # res = build_lines(rules, 0)
-    # print(res, end='\n\n')
-
-    # print(build_lines(rules, lines, 0))
+    rules, lines = get_data("2020/19/day19.txt")
     start = time.time()
-    print('The process of getting the solution for Part 1 has started...')
-    print('This naive implementation will take around 3.2 minutes to fetch the result...')
+    print("The process of getting the solution for Part 1 has started...")
+    print(
+        "This naive implementation will take around 3.2 minutes to fetch the result..."
+    )
     print(f"Part 1: {solve_1(rules, lines)}")
-    print(f'It took {round((time.time() - start) / 60, 2)} minutes.')
+    print(f"It took {round((time.time() - start) / 60, 2)} minutes.")
 
 
 def get_data(filename):
-    with open(filename, 'r') as file:
-        data = [item.split('\n') for item in file.read().strip().split('\n\n')]
-        rules, lines = [s.split(': ') for s in data[0]], data[1]
-        rules = {int(s[0]): s[1].replace('"', '').split() for s in rules}
+    with open(filename, "r") as file:
+        data = [item.split("\n") for item in file.read().strip().split("\n\n")]
+        rules, lines = [s.split(": ") for s in data[0]], data[1]
+        rules = {int(s[0]): s[1].replace('"', "").split() for s in rules}
         for key, value in rules.items():
-            if '|' in value:
-                split = value.index('|')
-                rules[key] = (value[:split], value[split + 1:])
-            elif value[0] in ['a', 'b']:
+            if "|" in value:
+                split = value.index("|")
+                rules[key] = (value[:split], value[split + 1 :])
+            elif value[0] in ["a", "b"]:
                 rules[key] = value[0]
     return rules, set(lines)
 
@@ -67,14 +63,12 @@ def build_lines(rules, lines, i):
                 recurse(rules, int(char))
 
     recurse(rules, i)
-    results = {''.join(res) for res in results}
+    results = {"".join(res) for res in results}
     return len(lines & results)
 
 
 def solve_1(rules, lines):
     results = [rules[0]]
-
-    print(results)
 
     while True:
         tmp = []
@@ -84,8 +78,8 @@ def solve_1(rules, lines):
                 if item[i].isdigit():
                     rule = rules[int(item[i])]
                     if isinstance(rule, tuple):
-                        tmp1 += rule[0] + item[i + 1:]
-                        tmp2 += rule[1] + item[i + 1:]
+                        tmp1 += rule[0] + item[i + 1 :]
+                        tmp2 += rule[1] + item[i + 1 :]
                         break
                     elif isinstance(rule, list):
                         tmp1 += rule
@@ -109,12 +103,10 @@ def solve_1(rules, lines):
             if not done:
                 break
 
-        print(results, end="\n\n\n")
-
         if done:
-            results = {''.join(res) for res in results}
+            results = {"".join(res) for res in results}
             return len(lines & results)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
