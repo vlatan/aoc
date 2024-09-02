@@ -1,9 +1,6 @@
 package main
 
-import (
-	wasteland "aoc/2023/08"
-	"fmt"
-)
+import day05 "aoc/2023/09"
 
 // https://adventofcode.com/2023
 func main() {
@@ -59,8 +56,12 @@ func main() {
 	// fmt.Println()
 
 	// https://adventofcode.com/2023/day/8
-	fmt.Println("Day 8: Haunted Wasteland")
-	wasteland.HauntedWastelandPartOne()
-	wasteland.HauntedWastelandPartTwo()
+	// fmt.Println("Day 8: Haunted Wasteland")
+	// wasteland.HauntedWastelandPartOne()
+	// wasteland.HauntedWastelandPartTwo()
+
+	// fmt.Println()
+	// https://adventofcode.com/2023/day/9
+	day05.Part1()
 
 }

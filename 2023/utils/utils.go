@@ -42,3 +42,11 @@ func ToInteger(num string) int {
 func IsDigit(b byte) bool {
 	return b >= '0' && b <= '9'
 }
+
+func Sum(lst []int) int {
+	result := 0
+	for _, num := range lst {
+		result += num
+	}
+	return result
+}
