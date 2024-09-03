@@ -1,6 +1,9 @@
 package main
 
-import day05 "aoc/2023/09"
+import (
+	day09 "aoc/2023/09"
+	"fmt"
+)
 
 // https://adventofcode.com/2023
 func main() {
@@ -61,8 +64,10 @@ func main() {
 	// wasteland.HauntedWastelandPartTwo()
 
 	// fmt.Println()
+
 	// https://adventofcode.com/2023/day/9
-	day05.Part1()
-	day05.Part2()
+	fmt.Println("Day 9: Mirage Maintenance")
+	day09.Part1()
+	day09.Part2()
 
 }
