@@ -7,8 +7,9 @@ import (
 
 // https://adventofcode.com/2023/day/10
 func Part1() {
-	start, graph := parseFile("10/input.txt")
-	loop := findLoop(graph[start].neighbors[0], graph[start])
+	startLoc, graph := parseFile("10/input.txt")
+	start, end := graph[startLoc].neighbors[0], graph[startLoc]
+	loop := findLoop(start, end)
 	fmt.Println((len(loop) + 1) / 2)
 }
 
