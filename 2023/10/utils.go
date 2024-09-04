@@ -44,6 +44,15 @@ func parseFile(path string) (Loc, Graph) {
 			}
 		}
 	}
+	// resolve the neighbours of "S" the starting point
+	node, x, y := graph[start], start.x, start.y
+	left, right := Loc{x, y - 1}, Loc{x, y + 1}
+	up, down := Loc{x - 1, y}, Loc{x + 1, y}
+	Connect(node, left, graph, "-LF")
+	Connect(node, right, graph, "-J7")
+	Connect(node, up, graph, "|7F")
+	Connect(node, down, graph, "|JL")
+
 	return start, graph
 }
 
