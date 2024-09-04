@@ -31,14 +31,15 @@ func parseFile(path string) (Loc, Graph) {
 			node := &Node{symbol, []*Node{}}
 			graph[Loc{x, y}] = node
 			// check above and/or left of the current node
+			up, left := Loc{x - 1, y}, Loc{x, y - 1}
 			switch symbol {
 			case '|', 'L':
-				Check(node, Loc{x - 1, y}, graph, "|7F")
+				Check(node, up, graph, "|7F")
 			case '-', '7':
-				Check(node, Loc{x, y - 1}, graph, "-LF")
+				Check(node, left, graph, "-LF")
 			case 'J':
-				Check(node, Loc{x - 1, y}, graph, "|7F")
-				Check(node, Loc{x, y - 1}, graph, "-LF")
+				Check(node, up, graph, "|7F")
+				Check(node, left, graph, "-LF")
 			case 'S':
 				start = Loc{x, y}
 			}
