@@ -30,16 +30,15 @@ func parseFile(path string) (Loc, Graph) {
 		for y, symbol := range line {
 			node := &Node{symbol, []*Node{}}
 			graph[Loc{x, y}] = node
-			// check above and/or left of the current node
 			up, left := Loc{x - 1, y}, Loc{x, y - 1}
 			switch symbol {
 			case '|', 'L':
-				Check(node, up, graph, "|7F")
+				Connect(node, up, graph, "|7F")
 			case '-', '7':
-				Check(node, left, graph, "-LF")
+				Connect(node, left, graph, "-LF")
 			case 'J':
-				Check(node, up, graph, "|7F")
-				Check(node, left, graph, "-LF")
+				Connect(node, up, graph, "|7F")
+				Connect(node, left, graph, "-LF")
 			case 'S':
 				start = Loc{x, y}
 			}
@@ -49,7 +48,7 @@ func parseFile(path string) (Loc, Graph) {
 }
 
 // If neighbour found connect the two nodes
-func Check(node *Node, target Loc, graph Graph, symbols string) {
+func Connect(node *Node, target Loc, graph Graph, symbols string) {
 	if nn, ok := graph[target]; ok {
 		if strings.ContainsRune(symbols, nn.symbol) {
 			node.neighbors = append(node.neighbors, nn)
