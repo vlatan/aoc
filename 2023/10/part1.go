@@ -23,10 +23,14 @@ func findLoop(start *Node, end *Node) []*Node {
 		visited = append(visited, start)
 		for _, node := range start.neighbors {
 			if !slices.Contains(visited, node) {
-				return append(recurse(node), start)
+				path := recurse(node)
+				if len(path) > 0 {
+					return append(path, start)
+				}
+				return []*Node{}
 			}
 		}
-		panic(fmt.Sprintf("There's no path from %v to %v", start, end))
+		return []*Node{}
 	}
 	return recurse(start)
 }
