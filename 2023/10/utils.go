@@ -18,6 +18,7 @@ type Node struct {
 
 type Graph map[Loc]*Node
 
+// Construct a graph data structure from file
 func parseFile(path string) (Loc, Graph) {
 	file, err := os.Open(path)
 	utils.Check(err)
@@ -54,7 +55,7 @@ func parseFile(path string) (Loc, Graph) {
 	return start, graph
 }
 
-// If neighbour found connect the two nodes
+// Connect two nodes if found to be neighbours
 func Connect(node *Node, target Loc, graph Graph, symbols string) {
 	if nn, ok := graph[target]; ok {
 		if strings.ContainsRune(symbols, nn.symbol) {
