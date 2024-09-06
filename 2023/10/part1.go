@@ -8,14 +8,22 @@ import (
 // https://adventofcode.com/2023/day/10
 func Part1() {
 	startLoc, graph := parseFile("10/input.txt")
-	start, end := graph[startLoc].neighbors[0], graph[startLoc]
-	loop := findLoop(start, end)
+	loop := findLoop(graph[startLoc])
 	fmt.Println((len(loop) + 1) / 2)
 }
 
-func findLoop(start *Node, end *Node) []*Node {
-	visited := []*Node{}
+// Returns a slice of nodes if loop possible.
+// If not returns an empty slice.
+func findLoop(start *Node) []*Node {
+
+	if len(start.neighbors) != 2 {
+		return []*Node{}
+	}
+
+	visited := []*Node{start}
+	next, end := start.neighbors[0], start.neighbors[1]
 	var recurse func(start *Node) []*Node
+
 	recurse = func(start *Node) []*Node {
 		if start == end {
 			return []*Node{start}
@@ -32,5 +40,8 @@ func findLoop(start *Node, end *Node) []*Node {
 		}
 		return []*Node{}
 	}
-	return recurse(start)
+
+	result := append(recurse(next), start)
+	slices.Reverse(result)
+	return result
 }
