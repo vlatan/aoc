@@ -35,13 +35,16 @@ func findLoop(start *Node) []*Node {
 				if len(path) > 0 {
 					return append(path, start)
 				}
-				return []*Node{}
+				return path
 			}
 		}
 		return []*Node{}
 	}
 
-	result := append(recurse(next), start)
-	slices.Reverse(result)
+	result := recurse(next)
+	if len(result) > 0 {
+		result = append(result, start)
+		slices.Reverse(result)
+	}
 	return result
 }
