@@ -4,8 +4,8 @@ import "fmt"
 
 // https://adventofcode.com/2023/day/10
 func Part2() {
-	matrix, startLoc, graph := parseFile("10/input.txt")
-	loop := findLoop(graph[startLoc])
+	matrix, startNode := parseFile("10/input.txt")
+	loop := findLoop(startNode)
 	result := castRays(matrix, loop)
 	fmt.Println(result)
 }

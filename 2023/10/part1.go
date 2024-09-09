@@ -6,7 +6,7 @@ import (
 
 // https://adventofcode.com/2023/day/10
 func Part1() {
-	_, startLoc, graph := parseFile("10/input.txt")
-	loop := findLoop(graph[startLoc])
+	_, startNode := parseFile("10/input.txt")
+	loop := findLoop(startNode)
 	fmt.Println((len(loop) + 1) / 2)
 }

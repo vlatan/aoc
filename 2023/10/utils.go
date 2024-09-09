@@ -21,13 +21,13 @@ type Node struct {
 type Graph map[Loc]*Node
 
 // Create Graph from matrix
-func parseFile(path string) ([]string, Loc, Graph) {
+func parseFile(path string) ([]string, *Node) {
 	file, err := os.Open(path)
 	utils.Check(err)
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	matrix, start, graph := []string{}, Loc{}, Graph{}
+	matrix, start, graph := []string{}, &Node{}, Graph{}
 	for x := 0; scanner.Scan(); x++ {
 		line := scanner.Text()
 		matrix = append(matrix, line)
@@ -44,18 +44,18 @@ func parseFile(path string) ([]string, Loc, Graph) {
 				Connect(node, up, graph, "|7F")
 				Connect(node, left, graph, "-LF")
 			case 'S':
-				start = Loc{x, y}
+				start = node
 				Connect(node, up, graph, "|7F")
 				Connect(node, left, graph, "-LF")
 			}
 		}
 	}
 	// finish resolving neighbours of "S"
-	node, x, y := graph[start], start.x, start.y
+	x, y := start.loc.x, start.loc.y
 	right, down := Loc{x, y + 1}, Loc{x + 1, y}
-	Connect(node, right, graph, "-J7")
-	Connect(node, down, graph, "|JL")
-	return matrix, start, graph
+	Connect(start, right, graph, "-J7")
+	Connect(start, down, graph, "|JL")
+	return matrix, start
 }
 
 // Connect two nodes if found to be neighbours
