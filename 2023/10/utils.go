@@ -76,7 +76,7 @@ func findLoop(start *Node) []*Node {
 		return []*Node{}
 	}
 
-	visited := []*Node{start}
+	visited := map[Loc]struct{}{start.loc: {}}
 	next, end := start.neighbors[0], start.neighbors[1]
 	var recurse func(start *Node) []*Node
 
@@ -84,9 +84,9 @@ func findLoop(start *Node) []*Node {
 		if start == end {
 			return []*Node{start}
 		}
-		visited = append(visited, start)
+		visited[start.loc] = struct{}{}
 		for _, node := range start.neighbors {
-			if !slices.Contains(visited, node) {
+			if _, ok := visited[node.loc]; !ok {
 				path := recurse(node)
 				if len(path) > 0 {
 					return append(path, start)
