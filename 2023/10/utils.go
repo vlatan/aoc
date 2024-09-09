@@ -13,23 +13,25 @@ type Loc struct {
 
 type Node struct {
 	symbol    rune
+	loc       Loc
 	neighbors []*Node
 }
 
 type Graph map[Loc]*Node
 
-// Construct a graph data structure from file
-func parseFile(path string) (Loc, Graph) {
+// Create Graph from matrix
+func parseFile(path string) ([]string, Loc, Graph) {
 	file, err := os.Open(path)
 	utils.Check(err)
 	defer file.Close()
-	scanner := bufio.NewScanner(file)
 
-	start, graph := Loc{}, Graph{}
+	scanner := bufio.NewScanner(file)
+	matrix, start, graph := []string{}, Loc{}, Graph{}
 	for x := 0; scanner.Scan(); x++ {
 		line := scanner.Text()
+		matrix = append(matrix, line)
 		for y, symbol := range line {
-			node := &Node{symbol, []*Node{}}
+			node := &Node{symbol, Loc{x, y}, []*Node{}}
 			graph[Loc{x, y}] = node
 			up, left := Loc{x - 1, y}, Loc{x, y - 1}
 			switch symbol {
@@ -47,12 +49,12 @@ func parseFile(path string) (Loc, Graph) {
 			}
 		}
 	}
-	// finish resolving the neighbours of "S"
+	// finish resolving neighbours of "S"
 	node, x, y := graph[start], start.x, start.y
 	right, down := Loc{x, y + 1}, Loc{x + 1, y}
 	Connect(node, right, graph, "-J7")
 	Connect(node, down, graph, "|JL")
-	return start, graph
+	return matrix, start, graph
 }
 
 // Connect two nodes if found to be neighbours
