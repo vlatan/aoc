@@ -74,6 +74,6 @@ func main() {
 
 	// https://adventofcode.com/2023/day/10
 	fmt.Println("Day 10: Pipe Maze")
-	// day10.Part1()
+	day10.Part1()
 	day10.Part2()
 }

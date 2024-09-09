@@ -22,7 +22,7 @@ func castRays(matrix []string, loop []*Node) (result int) {
 			for i := 1; x+i < len(matrix) && y+i < len(matrix[0]); i++ {
 				// check if the point is on the loop
 				node, onloop, oncorner := onLoop(Loc{x + i, y + i}, loop)
-				// point not on the loop, nothing to count
+				// point not on the loop, no intersection
 				if !onloop {
 					continue
 				}
@@ -37,13 +37,10 @@ func castRays(matrix []string, loop []*Node) (result int) {
 				n1, n2 := node.neighbors[0], node.neighbors[1]
 				left, down := Loc{x + i, y + i - 1}, Loc{x + i + 1, y + i}
 				up, right := Loc{x + i - 1, y + i}, Loc{x + i, y + i + 1}
-
-				if (n1.loc == left || n1.loc == down) &&
-					(n2.loc == left || n2.loc == down) {
-					continue
-				}
-				if (n1.loc == up || n1.loc == right) &&
-					(n2.loc == up || n2.loc == right) {
+				if ((n1.loc == left || n1.loc == down) &&
+					(n2.loc == left || n2.loc == down)) ||
+					((n1.loc == up || n1.loc == right) &&
+						(n2.loc == up || n2.loc == right)) {
 					continue
 				}
 				count++
@@ -68,8 +65,7 @@ func onLoop(loc Loc, loop []*Node) (node *Node, onloop bool, oncorner bool) {
 			prevIndex = len(loop) - 1
 		}
 		prev, next := loop[prevIndex], loop[(i+1)%len(loop)]
-		dx := abs(prev.loc.x - next.loc.x)
-		dy := abs(prev.loc.y - next.loc.y)
+		dx, dy := abs(prev.loc.x-next.loc.x), abs(prev.loc.y-next.loc.y)
 		if dx == 1 && dy == 1 {
 			return node, true, true
 		}
