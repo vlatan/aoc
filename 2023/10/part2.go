@@ -27,10 +27,10 @@ func castRays(matrix []string, loop Graph) (result int) {
 					continue
 				}
 				n1, n2 := node.neighbors[0], node.neighbors[1]
-				// Point is NOT on a corner of the loop.
+				// Point is on the loop but NOT on the corner of it.
 				// Count the intersection and do nothing else.
 				dx, dy := abs(n1.loc.x-n2.loc.x), abs(n1.loc.y-n2.loc.y)
-				if !(dx == 1 && dy == 1) {
+				if dx != 1 && dy != 1 {
 					count++
 					continue
 				}
