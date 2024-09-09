@@ -4,7 +4,6 @@ import (
 	"aoc/2023/utils"
 	"bufio"
 	"os"
-	"slices"
 	"strings"
 )
 
@@ -70,10 +69,10 @@ func Connect(node *Node, target Loc, graph Graph, symbols string) {
 
 // Returns a slice of nodes if loop possible.
 // If not returns an empty slice.
-func findLoop(start *Node) []*Node {
+func findLoop(start *Node) Graph {
 
 	if len(start.neighbors) != 2 {
-		return []*Node{}
+		return Graph{}
 	}
 
 	visited := map[Loc]struct{}{start.loc: {}}
@@ -97,10 +96,13 @@ func findLoop(start *Node) []*Node {
 		return []*Node{}
 	}
 
-	result := recurse(next)
-	if len(result) > 0 {
-		result = append(result, start)
-		slices.Reverse(result)
+	lst := recurse(next)
+	if len(lst) > 0 {
+		lst = append(lst, start)
+	}
+	result := make(Graph, len(lst))
+	for _, node := range lst {
+		result[node.loc] = node
 	}
 	return result
 }

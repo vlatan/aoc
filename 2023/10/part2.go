@@ -12,7 +12,7 @@ func Part2() {
 
 // Count points enclosed by the loop
 // Cast a reay diagonally for every eligible point on the matrix
-func castRays(matrix []string, loop []*Node) (result int) {
+func castRays(matrix []string, loop Graph) (result int) {
 	for x, line := range matrix {
 		for y := range line {
 			if _, onloop, _ := onLoop(Loc{x, y}, loop); onloop {
@@ -55,23 +55,17 @@ func castRays(matrix []string, loop []*Node) (result int) {
 }
 
 // Check if a point is on the loop and if so if it's on a corner too
-func onLoop(loc Loc, loop []*Node) (node *Node, onloop bool, oncorner bool) {
-	for i, node := range loop {
-		if node.loc != loc {
-			continue
-		}
-		prevIndex := i - 1
-		if prevIndex < 0 {
-			prevIndex = len(loop) - 1
-		}
-		prev, next := loop[prevIndex], loop[(i+1)%len(loop)]
-		dx, dy := abs(prev.loc.x-next.loc.x), abs(prev.loc.y-next.loc.y)
-		if dx == 1 && dy == 1 {
-			return node, true, true
-		}
-		return node, true, false
+func onLoop(loc Loc, loop Graph) (node *Node, onloop bool, oncorner bool) {
+	node, ok := loop[loc]
+	if !ok {
+		return node, false, false
 	}
-	return node, onloop, oncorner
+	n1, n2 := node.neighbors[0], node.neighbors[1]
+	dx, dy := abs(n1.loc.x-n2.loc.x), abs(n1.loc.y-n2.loc.y)
+	if dx == 1 && dy == 1 {
+		return node, true, true
+	}
+	return node, true, false
 }
 
 // Absolute value of an integer
