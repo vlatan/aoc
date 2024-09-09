@@ -46,7 +46,7 @@ func castRays(matrix []string, loop Graph) (result int) {
 				count++
 			}
 			// Odd number of interesections means
-			// the point is enclosed by the loop
+			// the point is inside the loop
 			if count%2 != 0 {
 				result++
 			}
