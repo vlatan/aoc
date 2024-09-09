@@ -11,7 +11,7 @@ func Part2() {
 }
 
 // Count points enclosed by the loop
-// Cast a reay diagonally for every eligible point on the matrix
+// Cast a ray diagonally for every eligible point on the matrix
 func castRays(matrix []string, loop Graph) (result int) {
 	for x, line := range matrix {
 		for y := range line {
@@ -29,8 +29,8 @@ func castRays(matrix []string, loop Graph) (result int) {
 				n1, n2 := node.neighbors[0], node.neighbors[1]
 				// Point is on the loop but NOT on the corner of it.
 				// Count the intersection and do nothing else.
-				dx, dy := abs(n1.loc.x-n2.loc.x), abs(n1.loc.y-n2.loc.y)
-				if dx != 1 && dy != 1 {
+				dx, dy := n1.loc.x-n2.loc.x, n1.loc.y-n2.loc.y
+				if abs(dx) != 1 && abs(dy) != 1 {
 					count++
 					continue
 				}
