@@ -34,7 +34,7 @@ func castRays(matrix []string, loop Graph) (result int) {
 					count++
 					continue
 				}
-				// Check if the ray is grazing on the outside of the corner.
+				// Check if the ray is grazing the corner on the outside.
 				// If so do NOT count the intersection.
 				left, down := Loc{x + i, y + i - 1}, Loc{x + i + 1, y + i}
 				up, right := Loc{x + i - 1, y + i}, Loc{x + i, y + i + 1}

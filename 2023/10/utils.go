@@ -67,8 +67,8 @@ func Connect(node *Node, target Loc, graph Graph, symbols string) {
 	}
 }
 
-// Returns a slice of nodes if loop possible.
-// If not returns an empty slice.
+// Returns a graph of nodes if loop possible.
+// If not returns an empty graph.
 func findLoop(start *Node) Graph {
 
 	if len(start.neighbors) != 2 {
