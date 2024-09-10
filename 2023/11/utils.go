@@ -17,6 +17,7 @@ func parseFile(path string) Matrix {
 	utils.Check(err)
 	defer file.Close()
 
+	// add empty rows
 	firstStage := Matrix{}
 	scanner := bufio.NewScanner(file)
 	for x := 0; scanner.Scan(); x++ {
@@ -38,6 +39,7 @@ func parseFile(path string) Matrix {
 		}
 	}
 
+	// add empty columns
 	matrix := make(Matrix, len(firstStage))
 	for y := 0; y < len(firstStage[0]); y++ {
 		galaxyColumn := false
@@ -57,7 +59,7 @@ func parseFile(path string) Matrix {
 	return matrix
 }
 
-func galaxyPairs(matrix Matrix) (result []Pair) {
+func galaxyPairs(matrix Matrix) (pairs []Pair) {
 	galaxies := []P{}
 	for x := 0; x < len(matrix); x++ {
 		for y := 0; y < len(matrix[0]); y++ {
@@ -68,8 +70,8 @@ func galaxyPairs(matrix Matrix) (result []Pair) {
 	}
 	for i, g1 := range galaxies {
 		for _, g2 := range galaxies[i+1:] {
-			result = append(result, Pair{g1, g2})
+			pairs = append(pairs, Pair{g1, g2})
 		}
 	}
-	return result
+	return pairs
 }
