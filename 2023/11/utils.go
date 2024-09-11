@@ -10,8 +10,6 @@ type Matrix [][]byte
 
 type P struct{ x, y int }
 
-type Pair struct{ a, b P }
-
 func parseFile(path string) Matrix {
 	file, err := os.Open(path)
 	utils.Check(err)
@@ -59,7 +57,7 @@ func parseFile(path string) Matrix {
 	return matrix
 }
 
-func galaxies(matrix Matrix) (galaxies []P) {
+func getGalaxies(matrix Matrix) (galaxies []P) {
 	for x := 0; x < len(matrix); x++ {
 		for y := 0; y < len(matrix[0]); y++ {
 			if matrix[x][y] == '#' {

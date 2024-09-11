@@ -5,41 +5,35 @@ import "fmt"
 // https://adventofcode.com/2023/day/11
 func Part1() {
 	matrix := parseFile("11/input.txt")
-	galaxies := galaxies(matrix)
+	galaxies := getGalaxies(matrix)
 	ignore, result := map[P]struct{}{}, 0
 	for _, node := range galaxies {
-		current := shortestPaths(node, ignore, matrix)
-		for _, num := range current {
-			result += num
-		}
+		result += shortestPathsSum(node, ignore, matrix)
 		ignore[node] = struct{}{}
 	}
 	fmt.Println(result)
 }
 
-func shortestPaths(start P, ignore map[P]struct{}, matrix Matrix) map[P]int {
-	distance := map[P]int{start: 0}
-	galaxies := map[P]int{start: 0}
-
-	queue := []P{start}
+// Sum of steps to shortest paths from start to all the other '#'
+func shortestPathsSum(start P, ignore map[P]struct{}, matrix Matrix) (result int) {
+	visited, queue := map[P]int{start: 0}, []P{start}
 	for len(queue) != 0 {
 		current := queue[0]
 		queue = queue[1:]
-
-		neighbours := getNeighbours(current, matrix)
-		for _, node := range neighbours {
-			if _, ok := distance[node]; !ok {
-				queue = append(queue, node)
-				distance[node] = distance[current] + 1
-				if matrix[node.x][node.y] == '#' {
-					if _, ok := ignore[node]; !ok {
-						galaxies[node] = distance[current] + 1
-					}
+		for _, node := range getNeighbours(current, matrix) {
+			if _, ok := visited[node]; ok {
+				continue
+			}
+			queue = append(queue, node)
+			visited[node] = visited[current] + 1
+			if matrix[node.x][node.y] == '#' {
+				if _, ok := ignore[node]; !ok {
+					result += visited[current] + 1
 				}
 			}
 		}
 	}
-	return galaxies
+	return result
 }
 
 func getNeighbours(point P, matrix Matrix) (neighbours []P) {
