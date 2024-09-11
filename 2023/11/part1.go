@@ -5,38 +5,41 @@ import "fmt"
 // https://adventofcode.com/2023/day/11
 func Part1() {
 	matrix := parseFile("11/input.txt")
-	// for _, line := range matrix {
-	// 	fmt.Println(string(line))
-	// }
-	pairs := galaxyPairs(matrix)
-	// fmt.Println(len(pairs))
-	result := 0
-	for _, pair := range pairs {
-		result += shortestPath(pair.a, pair.b, matrix)
+	galaxies := galaxies(matrix)
+	ignore, result := map[P]struct{}{}, 0
+	for _, node := range galaxies {
+		current := shortestPaths(node, ignore, matrix)
+		for _, num := range current {
+			result += num
+		}
+		ignore[node] = struct{}{}
 	}
 	fmt.Println(result)
 }
 
-func shortestPath(start P, end P, matrix Matrix) int {
+func shortestPaths(start P, ignore map[P]struct{}, matrix Matrix) map[P]int {
 	distance := map[P]int{start: 0}
-	queue := []P{start}
+	galaxies := map[P]int{start: 0}
 
+	queue := []P{start}
 	for len(queue) != 0 {
 		current := queue[0]
 		queue = queue[1:]
 
 		neighbours := getNeighbours(current, matrix)
-		for _, n := range neighbours {
-			if _, ok := distance[n]; !ok {
-				queue = append(queue, n)
-				distance[n] = distance[current] + 1
-			}
-			if n == end {
-				return distance[n]
+		for _, node := range neighbours {
+			if _, ok := distance[node]; !ok {
+				queue = append(queue, node)
+				distance[node] = distance[current] + 1
+				if matrix[node.x][node.y] == '#' {
+					if _, ok := ignore[node]; !ok {
+						galaxies[node] = distance[current] + 1
+					}
+				}
 			}
 		}
 	}
-	return distance[start]
+	return galaxies
 }
 
 func getNeighbours(point P, matrix Matrix) (neighbours []P) {

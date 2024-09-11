@@ -59,8 +59,7 @@ func parseFile(path string) Matrix {
 	return matrix
 }
 
-func galaxyPairs(matrix Matrix) (pairs []Pair) {
-	galaxies := []P{}
+func galaxies(matrix Matrix) (galaxies []P) {
 	for x := 0; x < len(matrix); x++ {
 		for y := 0; y < len(matrix[0]); y++ {
 			if matrix[x][y] == '#' {
@@ -68,10 +67,5 @@ func galaxyPairs(matrix Matrix) (pairs []Pair) {
 			}
 		}
 	}
-	for i, g1 := range galaxies {
-		for _, g2 := range galaxies[i+1:] {
-			pairs = append(pairs, Pair{g1, g2})
-		}
-	}
-	return pairs
+	return galaxies
 }
