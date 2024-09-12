@@ -10,7 +10,7 @@ type Matrix [][]byte
 
 type P struct{ x, y int }
 
-type Space map[int]struct{}
+type Space map[int]bool
 
 func parseFile(path string) (Matrix, []P, Space, Space) {
 	file, err := os.Open(path)
@@ -18,7 +18,7 @@ func parseFile(path string) (Matrix, []P, Space, Space) {
 	defer file.Close()
 
 	matrix, galaxies := Matrix{}, []P{}
-	emptyRows, emptyColumns := Space{}, Space{}
+	eRows, eCols := Space{}, Space{}
 
 	scanner := bufio.NewScanner(file)
 	for x := 0; scanner.Scan(); x++ {
@@ -32,7 +32,7 @@ func parseFile(path string) (Matrix, []P, Space, Space) {
 			}
 		}
 		if emptyRow {
-			emptyRows[x] = struct{}{}
+			eRows[x] = true
 		}
 	}
 
@@ -45,10 +45,10 @@ func parseFile(path string) (Matrix, []P, Space, Space) {
 			}
 		}
 		if emptyColumn {
-			emptyColumns[y] = struct{}{}
+			eCols[y] = true
 		}
 	}
-	return matrix, galaxies, emptyRows, emptyColumns
+	return matrix, galaxies, eRows, eCols
 }
 
 // Sum of steps to shortest paths from start to all the other '#'
@@ -67,13 +67,11 @@ func shortestPathsSum(
 			if _, ok := visited[node]; ok {
 				continue
 			}
-			queue = append(queue, node)
 			step := 1
-			_, xs := eRows[current.x]
-			_, ys := eCols[current.y]
-			if (xs && (node.x != current.x)) || (ys && (node.y != current.y)) {
+			if eRows[current.x] || eCols[current.y] {
 				step = expansion
 			}
+			queue = append(queue, node)
 			visited[node] = visited[current] + step
 			if matrix[node.x][node.y] == '#' {
 				if _, ok := done[node]; !ok {
