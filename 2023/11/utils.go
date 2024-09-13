@@ -58,8 +58,7 @@ func shortestPathsSum(expansion int) (result int) {
 	matrix, galaxies, eRows, eCols := parseFile("11/input.txt")
 	done := map[P]struct{}{}
 
-	dijkstra := func(start P) int {
-		currentResult := 0
+	dijkstra := func(start P) (currentResult int) {
 		visited, queue := map[P]int{start: 0}, []P{start}
 		for len(queue) != 0 {
 			current := queue[0]
@@ -81,7 +80,7 @@ func shortestPathsSum(expansion int) (result int) {
 				}
 			}
 		}
-		return currentResult
+		return
 	}
 
 	for _, node := range galaxies {
@@ -110,5 +109,5 @@ func getNeighbours(point P, matrix Matrix) (neighbours []P) {
 	if x+1 < len(matrix) {
 		neighbours = append(neighbours, down)
 	}
-	return neighbours
+	return
 }
