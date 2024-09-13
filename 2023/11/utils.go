@@ -51,36 +51,45 @@ func parseFile(path string) (Matrix, []P, Space, Space) {
 	return matrix, galaxies, eRows, eCols
 }
 
-// Sum of steps to shortest paths from start to all the other '#'
-func shortestPathsSum(
-	start P,
-	done map[P]struct{},
-	matrix Matrix,
-	eRows Space,
-	eCols Space,
-	expansion int) (result int) {
-	visited, queue := map[P]int{start: 0}, []P{start}
-	for len(queue) != 0 {
-		current := queue[0]
-		queue = queue[1:]
-		for _, node := range getNeighbours(current, matrix) {
-			if _, ok := visited[node]; ok {
-				continue
-			}
-			step := 1
-			if eRows[current.x] || eCols[current.y] {
-				step = expansion
-			}
-			queue = append(queue, node)
-			visited[node] = visited[current] + step
-			if matrix[node.x][node.y] == '#' {
-				if _, ok := done[node]; !ok {
-					result += visited[node]
+// Sum of steps to shortest paths between
+// all the pairs of galaxies in the universe
+func shortestPathsSum(expansion int) (result int) {
+
+	matrix, galaxies, eRows, eCols := parseFile("11/input.txt")
+	done := map[P]struct{}{}
+
+	dijkstra := func(start P) int {
+		currentResult := 0
+		visited, queue := map[P]int{start: 0}, []P{start}
+		for len(queue) != 0 {
+			current := queue[0]
+			queue = queue[1:]
+			for _, node := range getNeighbours(current, matrix) {
+				if _, ok := visited[node]; ok {
+					continue
+				}
+				step := 1
+				if eRows[current.x] || eCols[current.y] {
+					step = expansion
+				}
+				queue = append(queue, node)
+				visited[node] = visited[current] + step
+				if matrix[node.x][node.y] == '#' {
+					if _, ok := done[node]; !ok {
+						currentResult += visited[node]
+					}
 				}
 			}
 		}
+		return currentResult
 	}
-	return result
+
+	for _, node := range galaxies {
+		result += dijkstra(node)
+		done[node] = struct{}{}
+	}
+	return
+
 }
 
 // Get neighbours of a coordinate on the matrix
@@ -102,15 +111,4 @@ func getNeighbours(point P, matrix Matrix) (neighbours []P) {
 		neighbours = append(neighbours, down)
 	}
 	return neighbours
-}
-
-// Find the sum of all shortest path between all galaxies in the universe
-func allShortestPathsSum(expansion int) (result int) {
-	matrix, galaxies, eRows, eCols := parseFile("11/input.txt")
-	done := map[P]struct{}{}
-	for _, node := range galaxies {
-		result += shortestPathsSum(node, done, matrix, eRows, eCols, expansion)
-		done[node] = struct{}{}
-	}
-	return
 }

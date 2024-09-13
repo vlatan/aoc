@@ -5,6 +5,6 @@ import "fmt"
 // https://adventofcode.com/2023/day/11
 func Part1() {
 	expansion := 2
-	result := allShortestPathsSum(expansion)
+	result := shortestPathsSum(expansion)
 	fmt.Println(result)
 }
