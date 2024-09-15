@@ -16,13 +16,14 @@ import (
 
 // https://adventofcode.com/2023/day/12
 func Part1() {
-	data := parseFile("12/input.txt")
+	lines, groups := parseFile("12/input.txt")
 
 	result := 0
-	for str, groups := range data {
-		// prepare groups
+	for i := 0; i < len(lines); i++ {
+
+		// prepare group
 		gs := []string{}
-		for _, num := range groups {
+		for _, num := range groups[i] {
 			group := ""
 			for i := 0; i < num; i++ {
 				group += "#"
@@ -30,72 +31,32 @@ func Part1() {
 			gs = append(gs, group)
 		}
 
-		// see where all the '?' are at
-		indexes := []int{}
-		for i, b := range str {
-			if b == '?' {
-				indexes = append(indexes, i)
-			}
-		}
-
-		// generate permutations of '.' and '#' with length len(indexes)
-		values := []byte{'.', '#'}
-		ch := genPermutations(values, len(indexes))
-
-		for permutation := range ch {
-			bs := []byte(str)
-			// construct a slice according to the permutation
-			for i, index := range indexes {
-				bs[index] = permutation[i]
-			}
-
-			bss := []string{}
-			for _, item := range strings.Split(string(bs), ".") {
-				if item != "" {
-					bss = append(bss, item)
-				}
-			}
-
-			if slices.Equal(bss, gs) {
-				// fmt.Println(string(bs), gs)
-				result++
-			}
-		}
+		result += solve(lines[i], gs)
 	}
 	fmt.Println(result)
 }
 
-// Generate permutations of values in a slice of length
-// Feed each permutation in a channel
-func genPermutations(values []byte, length int) chan []byte {
-	ch, k := make(chan []byte), len(values)
-
-	go func(ch chan []byte) {
-		defer close(ch)
-		p, pn := make([]byte, length), make([]int, length)
-		for {
-			// generate permutaton
-			for i, x := range pn {
-				p[i] = values[x]
-			}
-
-			// push permutation to channel
-			ch <- slices.Clone(p)
-
-			// increment permutation number
-			for i := 0; ; {
-				pn[i]++
-				if pn[i] < k {
-					break
-				}
-				pn[i] = 0
-				i++
-				if i == length {
-					return // all permutations generated
-				}
-			}
+func solve(s string, gs []string) int {
+	for i := 0; i < len(s); i++ {
+		if s[i] != '?' {
+			continue
 		}
-	}(ch)
+		s1 := s[:i] + "." + s[i+1:]
+		s2 := s[:i] + "#" + s[i+1:]
+		return solve(s1, gs) + solve(s2, gs)
+	}
+	if valid(s, gs) {
+		return 1
+	}
+	return 0
+}
 
-	return ch
+func valid(s string, gs []string) bool {
+	bss := []string{}
+	for _, item := range strings.Split(s, ".") {
+		if strings.ContainsRune(item, '#') {
+			bss = append(bss, item)
+		}
+	}
+	return slices.Equal(bss, gs)
 }
