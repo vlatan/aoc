@@ -3,60 +3,71 @@ package day12
 import (
 	"fmt"
 	"slices"
-	"strings"
 )
-
-// Every '?' can be '.' or '#'.
-// Determine the indexes of the '?' in the string
-// Produce the permutations of them being populated with '.' or/and '#'
-// The number of the permutations should be 2^n, whene n is the number of '?'
-// Try every permutation and check if the string satisfies the contiguous group criteria.
-// If so count the permutation as a valid arrangement.
-// Take the sum of all posible arangements.
 
 // https://adventofcode.com/2023/day/12
 func Part1() {
 	lines, groups := parseFile("12/input.txt")
-
 	result := 0
 	for i := 0; i < len(lines); i++ {
-
-		// prepare group
-		gs := []string{}
-		for _, num := range groups[i] {
-			group := ""
-			for i := 0; i < num; i++ {
-				group += "#"
-			}
-			gs = append(gs, group)
-		}
-
-		result += solve(lines[i], gs)
+		result += solve(lines[i], groups[i])
 	}
 	fmt.Println(result)
 }
 
-func solve(s string, gs []string) int {
+// Recursive function to branch out on "?" and test two paths ("." and "#")
+func solve(s string, gs []int) int {
 	for i := 0; i < len(s); i++ {
 		if s[i] != '?' {
 			continue
 		}
-		s1 := s[:i] + "." + s[i+1:]
-		s2 := s[:i] + "#" + s[i+1:]
-		return solve(s1, gs) + solve(s2, gs)
+		result := 0
+		if ps := s[:i] + "."; viable(getGroups(ps), gs) {
+			result += solve(ps+s[i+1:], gs)
+		}
+		if ps := s[:i] + "#"; viable(getGroups(ps), gs) {
+			result += solve(ps+s[i+1:], gs)
+		}
+		return result
 	}
-	if valid(s, gs) {
+	if slices.Equal(getGroups(s), gs) {
 		return 1
 	}
 	return 0
 }
 
-func valid(s string, gs []string) bool {
-	bss := []string{}
-	for _, item := range strings.Split(s, ".") {
-		if strings.ContainsRune(item, '#') {
-			bss = append(bss, item)
+// Calculate groups of '#' from a string
+func getGroups(s string) []int {
+	groupFound, groups := false, []int{}
+	for i := 0; i < len(s); i++ {
+		switch s[i] {
+		case '#':
+			if groupFound {
+				groups[len(groups)-1]++
+				continue
+			}
+			groupFound = true
+			groups = append(groups, 1)
+		case '.':
+			groupFound = false
 		}
 	}
-	return slices.Equal(bss, gs)
+	return groups
+}
+
+// Check if a partial string is viable to continue.
+// Has the correct groups so far.
+func viable(g1 []int, g2 []int) bool {
+	if len(g1) > len(g2) {
+		return false
+	}
+	for i := 0; i < len(g1); i++ {
+		if i == len(g1)-1 && g1[i] <= g2[i] {
+			return true
+		}
+		if g1[i] != g2[i] {
+			return false
+		}
+	}
+	return true
 }
