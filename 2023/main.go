@@ -89,5 +89,5 @@ func main() {
 	// https://adventofcode.com/2023/day/12
 	fmt.Println("Day 12: Hot Springs")
 	day12.Part1()
-	// day12.Part2()
+	day12.Part2()
 }

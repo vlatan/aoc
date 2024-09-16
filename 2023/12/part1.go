@@ -5,28 +5,45 @@ import (
 	"slices"
 )
 
+type Cache map[string]int
+
 // https://adventofcode.com/2023/day/12
 func Part1() {
 	lines, groups := parseFile("12/input.txt")
 	result := 0
 	for i := 0; i < len(lines); i++ {
-		result += solve(lines[i], groups[i])
+		result += solve(lines[i], groups[i], Cache{})
 	}
 	fmt.Println(result)
 }
 
-// Recursive function to branch out on "?" and test two paths ("." and "#")
-func solve(s string, gs []int) int {
+// Recursive function to branch out on "?"
+// and test two paths ("." and "#")
+// only if those paths are worth considering.
+func solve(s string, gs []int, cache Cache) int {
 	for i := 0; i < len(s); i++ {
 		if s[i] != '?' {
 			continue
 		}
 		result := 0
-		if ps := s[:i] + "."; viable(getGroups(ps), gs) {
-			result += solve(ps+s[i+1:], gs)
+		ps := s[:i] + "."
+		if gg := getGroups(ps); viable(gg, gs) {
+			key := s[i+1:] + fmt.Sprintf("%v", gg)
+			if val, ok := cache[key]; ok {
+				result += val
+			} else {
+				result += solve(ps+s[i+1:], gs, cache)
+				cache[key] = result
+			}
 		}
-		if ps := s[:i] + "#"; viable(getGroups(ps), gs) {
-			result += solve(ps+s[i+1:], gs)
+		ps = s[:i] + "#"
+		if gg := getGroups(ps); viable(gg, gs) {
+			key := s[i+1:] + fmt.Sprintf("%v", gg)
+			if val, ok := cache[key]; ok {
+				result += val
+			} else {
+				result += solve(ps+s[i+1:], gs, cache)
+			}
 		}
 		return result
 	}
