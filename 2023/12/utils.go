@@ -18,7 +18,7 @@ func parseFile(path string) ([]string, [][]int) {
 
 	scanner := bufio.NewScanner(file)
 	lines, groups := []string{}, [][]int{}
-	for x := 0; scanner.Scan(); x++ {
+	for scanner.Scan() {
 		fields := strings.Fields(scanner.Text())
 		lines = append(lines, fields[0])
 		list := strings.Split(fields[1], ",")
