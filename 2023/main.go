@@ -96,5 +96,5 @@ func main() {
 	// https://adventofcode.com/2023/day/13
 	fmt.Println("Day 13: Point of Incidence")
 	day13.Part1()
-	// day13.Part2()
+	day13.Part2()
 }

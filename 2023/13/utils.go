@@ -9,7 +9,7 @@ import (
 type Pattern []string
 
 // Parse file to a list of patterns
-func parseFile(path string) (r []Pattern) {
+func parseFile(path string) (r, t []Pattern) {
 	file, err := os.Open(path)
 	utils.Check(err)
 	defer file.Close()
@@ -22,9 +22,11 @@ func parseFile(path string) (r []Pattern) {
 			continue
 		}
 		r = append(r, pattern)
+		t = append(t, pattern.Transpose())
 		pattern = Pattern{}
 	}
 	r = append(r, pattern)
+	t = append(t, pattern.Transpose())
 	return
 }
 
