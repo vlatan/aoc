@@ -1,7 +1,7 @@
 package main
 
 import (
-	day13 "aoc/2023/13"
+	day14 "aoc/2023/14"
 	"fmt"
 )
 
@@ -94,7 +94,14 @@ func main() {
 	// fmt.Println()
 
 	// https://adventofcode.com/2023/day/13
-	fmt.Println("Day 13: Point of Incidence")
-	day13.Part1()
-	day13.Part2()
+	// fmt.Println("Day 13: Point of Incidence")
+	// day13.Part1()
+	// day13.Part2()
+
+	// fmt.Println()
+
+	// https://adventofcode.com/2023/day/13
+	fmt.Println("Day 14: Parabolic Reflector Dish")
+	day14.Part1()
+	// day14.Part2()
 }
