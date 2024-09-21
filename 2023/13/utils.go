@@ -44,15 +44,6 @@ func (p Pattern) Transpose() Pattern {
 	return result
 }
 
-// Return the number of rows before a line of reflection.
-// Ignore result if ignore >= 0
-func calcRows(p, t Pattern, ignore int) int {
-	if rows := p.Process(100, ignore); rows != 0 {
-		return rows
-	}
-	return t.Process(1, ignore)
-}
-
 // Find the line of reflection.
 // Return the prev number of rows.
 // Return zero if no true line of reflection.
@@ -84,4 +75,13 @@ func (p Pattern) Reflect(start, delta int) int {
 		}
 	}
 	return len(p[:start]) * delta
+}
+
+// Return the number of rows before a line of reflection.
+// Ignore result if ignore >= 0
+func calcRows(p, t Pattern, ignore int) int {
+	if rows := p.Process(100, ignore); rows != 0 {
+		return rows
+	}
+	return t.Process(1, ignore)
 }
