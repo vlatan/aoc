@@ -100,8 +100,8 @@ func main() {
 
 	// fmt.Println()
 
-	// https://adventofcode.com/2023/day/13
+	// https://adventofcode.com/2023/day/14
 	fmt.Println("Day 14: Parabolic Reflector Dish")
 	day14.Part1()
-	// day14.Part2()
+	day14.Part2()
 }
