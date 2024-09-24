@@ -110,5 +110,5 @@ func main() {
 	// https://adventofcode.com/2023/day/15
 	fmt.Println("Day 15: Lens Library")
 	day15.Part1()
-	// day15.Part2()
+	day15.Part2()
 }
