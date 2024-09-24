@@ -27,15 +27,15 @@ func Part2() {
 		default:
 			box := hash(item[:len(item)-2])
 			label := Label{item[:len(item)-2], int(item[len(item)-1] - '0')}
-			replaced := false
+			found := false
 			for i, l := range hashmap[box] {
 				if l.name == label.name {
 					hashmap[box][i] = label
-					replaced = true
+					found = true
 					break
 				}
 			}
-			if !replaced {
+			if !found {
 				hashmap[box] = append(hashmap[box], label)
 			}
 
