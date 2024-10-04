@@ -117,5 +117,5 @@ func main() {
 	// https://adventofcode.com/2023/day/16
 	fmt.Println("Day 16: The Floor Will Be Lava")
 	day16.Part1()
-	// day16.Part2()
+	day16.Part2()
 }
