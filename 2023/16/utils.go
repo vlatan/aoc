@@ -19,7 +19,7 @@ func parseFile(path string) (r Matrix) {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	for x := 0; scanner.Scan(); x++ {
+	for scanner.Scan() {
 		r = append(r, []byte(scanner.Text()))
 	}
 	return
