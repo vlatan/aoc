@@ -124,6 +124,6 @@ func main() {
 	// https://adventofcode.com/2023/day/17
 	fmt.Println("Day 17: Clumsy Crucible")
 	day17.Part1()
-	// day17.Part2()
+	day17.Part2()
 
 }

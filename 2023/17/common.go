@@ -3,10 +3,18 @@ package day17
 import (
 	"aoc/2023/utils"
 	"bufio"
+	"container/heap"
 	"os"
 )
 
 type Matrix [][]int
+type P struct{ x, y int }
+type State struct {
+	loc                  P
+	dx, dy, streak, loss int
+}
+type States []State
+type createStates func(Matrix, State) States
 
 func parseFile(path string) (r Matrix) {
 	file, err := os.Open(path)
@@ -23,4 +31,43 @@ func parseFile(path string) (r Matrix) {
 		r = append(r, slice)
 	}
 	return
+}
+
+func solve(m Matrix, start, end P, fn createStates) int {
+	visited := make(map[State]struct{})
+	pq := &PriorityQueue{}
+	heap.Init(pq)
+	heap.Push(pq, State{start, 1, 0, 0, 0})
+	heap.Push(pq, State{start, 0, 1, 0, 0})
+
+	for pq.Len() > 0 {
+		// pop the state with the least accumulated heat loss
+		state := heap.Pop(pq).(State)
+
+		// if end location we're done
+		if state.loc == end {
+			return state.loss
+		}
+
+		// create the next states
+		for _, n := range fn(m, state) {
+			// if state not processed
+			if _, ok := visited[n]; !ok {
+				visited[n] = struct{}{}
+				// compound the heat loss for this state
+				n.loss += state.loss
+				// push the state to heap to be processed
+				heap.Push(pq, n)
+			}
+		}
+	}
+	return 0
+}
+
+func (r *States) Push(dx, dy, streak int, loc P, m Matrix) {
+	x, y := loc.x+dx, loc.y+dy
+	// if in bounds append new state to slice
+	if x >= 0 && x < len(m) && y >= 0 && y < len(m[0]) {
+		*r = append(*r, State{P{x, y}, dx, dy, streak, m[x][y]})
+	}
 }
