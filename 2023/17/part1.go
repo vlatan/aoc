@@ -5,6 +5,9 @@ import (
 	"fmt"
 )
 
+type P struct{ x, y int }
+type State struct{ x, y, dx, dy, streak, loss int }
+
 // https://adventofcode.com/2023/day/17
 func Part1() {
 	m := parseFile("17/input.txt")
@@ -12,37 +15,28 @@ func Part1() {
 	fmt.Println(result)
 }
 
-type States []State
-type P struct{ x, y int }
-type Direction uint8
-
-const (
-	N Direction = iota
-	E
-	S
-	W
-)
-
 func solve(m Matrix, start, end P) int {
 	visited := make(map[State]struct{})
-	pq := &PriorityQueue{{start, W, 0, 0}, {start, N, 0, 0}}
+	x, y := start.x, start.y
+	pq := &PriorityQueue{}
 	heap.Init(pq)
+	heap.Push(pq, State{x, y, 1, 0, 0, 0})
+	heap.Push(pq, State{x, y, 0, 1, 0, 0})
 
 	for pq.Len() > 0 {
 		// pop the state with the least accumulated heat loss
 		state := heap.Pop(pq).(State)
 
 		// if end state
-		if state.loc == end {
+		if (P{state.x, state.y}) == end {
 			return state.loss
 		}
 
-		// get legit States
-		nextStates := getNextStates(m, state)
-		for _, n := range nextStates {
+		// create the next states
+		for _, n := range getNextStates(m, state) {
 			if _, ok := visited[n]; !ok {
 				visited[n] = struct{}{}
-				n.loss = state.loss + m[n.loc.x][n.loc.y]
+				n.loss = state.loss + m[n.x][n.y]
 				heap.Push(pq, n)
 			}
 		}
@@ -50,38 +44,31 @@ func solve(m Matrix, start, end P) int {
 	return 0
 }
 
-func getNextStates(m Matrix, c State) (r States) {
+func getNextStates(m Matrix, s State) (r []State) {
+	xMax, yMax := len(m)-1, len(m[0])-1
 
-	switch c.comingFrom {
-	case N, S:
-		r.Add(c.loc.x, c.loc.y-1, m, E, 0)
-		r.Add(c.loc.x, c.loc.y+1, m, W, 0)
-	case E, W:
-		r.Add(c.loc.x-1, c.loc.y, m, S, 0)
-		r.Add(c.loc.x+1, c.loc.y, m, N, 0)
+	dx, dy := s.dy, -s.dx
+	x, y := s.x+dx, s.y+dy
+	if inBounds(xMax, yMax, x, y) {
+		r = append(r, State{x, y, dx, dy, 1, m[x][y]})
 	}
 
-	switch c.comingFrom {
-	case N:
-		r.Add(c.loc.x+1, c.loc.y, m, N, c.streak)
-	case E:
-		r.Add(c.loc.x, c.loc.y-1, m, E, c.streak)
-	case S:
-		r.Add(c.loc.x-1, c.loc.y, m, S, c.streak)
-	case W:
-		r.Add(c.loc.x, c.loc.y+1, m, W, c.streak)
+	dx, dy = -s.dy, s.dx
+	x, y = s.x+dx, s.y+dy
+	if inBounds(xMax, yMax, x, y) {
+		r = append(r, State{x, y, dx, dy, 1, m[x][y]})
 	}
+
+	dx, dy = s.dx, s.dy
+	x, y = s.x+dx, s.y+dy
+	if inBounds(xMax, yMax, x, y) && s.streak < 3 {
+		r = append(r, State{x, y, dx, dy, s.streak + 1, m[x][y]})
+	}
+
 	return
 }
 
-func (slice *States) Add(x, y int, m Matrix, d Direction, streak int) {
-	if inBounds(m, P{x, y}) && streak < 3 {
-		crucible := State{P{x, y}, d, streak + 1, m[x][y]}
-		*slice = append(*slice, crucible)
-	}
-}
-
-func inBounds(m Matrix, p P) bool {
-	return p.x >= 0 && p.x < len(m) &&
-		p.y >= 0 && p.y < len(m[0])
+func inBounds(xMax, yMax, x, y int) bool {
+	return x >= 0 && x <= xMax &&
+		y >= 0 && y <= yMax
 }

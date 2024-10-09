@@ -1,12 +1,5 @@
 package day17
 
-type State struct {
-	loc        P
-	comingFrom Direction
-	streak     int
-	loss       int
-}
-
 // implements heap.Interface
 // https://pkg.go.dev/container/heap
 type PriorityQueue []State
