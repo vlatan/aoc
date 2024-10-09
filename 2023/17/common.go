@@ -14,6 +14,7 @@ type State struct {
 	dx, dy, streak, loss int
 }
 type States []State
+type isEnd func(State, P) bool
 type createStates func(Matrix, State) States
 
 func parseFile(path string) (r Matrix) {
@@ -33,7 +34,7 @@ func parseFile(path string) (r Matrix) {
 	return
 }
 
-func solve(m Matrix, start, end P, fn createStates) int {
+func solve(m Matrix, start, end P, fn1 isEnd, fn2 createStates) int {
 	visited := make(map[State]struct{})
 	pq := &PriorityQueue{}
 	heap.Init(pq)
@@ -45,12 +46,11 @@ func solve(m Matrix, start, end P, fn createStates) int {
 		state := heap.Pop(pq).(State)
 
 		// if end location we're done
-		if state.loc == end {
+		if fn1(state, end) {
 			return state.loss
 		}
 
-		// create the next states
-		for _, n := range fn(m, state) {
+		for _, n := range fn2(m, state) {
 			// if state not processed
 			if _, ok := visited[n]; !ok {
 				visited[n] = struct{}{}
