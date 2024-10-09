@@ -10,6 +10,7 @@ type State struct {
 	loc                  P
 	dx, dy, streak, loss int
 }
+type States []State
 
 // https://adventofcode.com/2023/day/17
 func Part1() {
@@ -36,7 +37,7 @@ func solve(m Matrix, start, end P) int {
 		}
 
 		// create the next states
-		for _, n := range getNextStates(m, state) {
+		for _, n := range state.CreateNewStates(m) {
 			if _, ok := visited[n]; !ok {
 				visited[n] = struct{}{}
 				n.loss = state.loss + m[n.loc.x][n.loc.y]
@@ -47,25 +48,11 @@ func solve(m Matrix, start, end P) int {
 	return 0
 }
 
-func getNextStates(m Matrix, s State) (r []State) {
-	xMax, yMax := len(m)-1, len(m[0])-1
-
-	dx, dy := s.dy, -s.dx
-	x, y := s.loc.x+dx, s.loc.y+dy
-	if inBounds(xMax, yMax, x, y) {
-		r = append(r, State{P{x, y}, dx, dy, 1, m[x][y]})
-	}
-
-	dx, dy = -s.dy, s.dx
-	x, y = s.loc.x+dx, s.loc.y+dy
-	if inBounds(xMax, yMax, x, y) {
-		r = append(r, State{P{x, y}, dx, dy, 1, m[x][y]})
-	}
-
-	dx, dy = s.dx, s.dy
-	x, y = s.loc.x+dx, s.loc.y+dy
-	if inBounds(xMax, yMax, x, y) && s.streak < 3 {
-		r = append(r, State{P{x, y}, dx, dy, s.streak + 1, m[x][y]})
+func (s State) CreateNewStates(m Matrix) (r States) {
+	r.Push(s.dy, -s.dx, 1, s.loc, m)
+	r.Push(-s.dy, s.dx, 1, s.loc, m)
+	if s.streak < 3 {
+		r.Push(s.dx, s.dy, s.streak+1, s.loc, m)
 	}
 
 	return
@@ -74,4 +61,12 @@ func getNextStates(m Matrix, s State) (r []State) {
 func inBounds(xMax, yMax, x, y int) bool {
 	return x >= 0 && x <= xMax &&
 		y >= 0 && y <= yMax
+}
+
+func (r *States) Push(dx, dy, streak int, loc P, m Matrix) {
+	xMax, yMax := len(m)-1, len(m[0])-1
+	x, y := loc.x+dx, loc.y+dy
+	if inBounds(xMax, yMax, x, y) {
+		*r = append(*r, State{P{x, y}, dx, dy, streak, m[x][y]})
+	}
 }
