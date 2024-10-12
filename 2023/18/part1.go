@@ -11,9 +11,7 @@ func Part1() {
 	result := 0
 	for x := bBox.xMin; x <= bBox.xMax; x++ {
 		for y := bBox.yMin; y <= bBox.yMax; y++ {
-			if (P{x, y}).castRay(graph, bBox) {
-				result++
-			}
+			result += (P{x, y}).castRay(graph, bBox)
 		}
 	}
 	fmt.Println(result)

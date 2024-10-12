@@ -7,15 +7,12 @@ import (
 
 // https://adventofcode.com/2023/day/18
 func Part2() {
-	graph, bBox := parseFile("18/input.txt", processLine1)
-	grid := bBox.MakeGrid(7)
+	graph, b := parseFile("18/input.txt", processLine1)
+	grid := b.Grid(7)
 
 	result := 0
 	for b := range grid {
-		vertices := []P{
-			{b.xMin, b.yMin}, {b.xMin, b.yMax},
-			{b.xMax, b.yMin}, {b.xMax, b.yMax},
-		}
+		result += b.Count(b, graph)
 
 		// Traverse the perimeter of b.
 		// If all points are not in the polygon skip the entire b.
@@ -24,26 +21,6 @@ func Part2() {
 		// When done shrink the perimeter and repeat the procedure.
 		// Probably a nice oportunity for recursion
 
-		clean := true
-		for _, vertex := range vertices {
-			if vertex.castRay(graph, bBox) {
-				clean = false
-				break
-			}
-		}
-
-		if clean {
-			continue
-		}
-
-		// cast rays for all the points in this quadrant
-		for x := b.xMin; x <= b.xMax; x++ {
-			for y := b.yMin; y <= b.yMax; y++ {
-				if (P{x, y}).castRay(graph, bBox) {
-					result++
-				}
-			}
-		}
 	}
 
 	fmt.Println(result)
@@ -66,43 +43,66 @@ func processLine2(fields []string) (string, uint64) {
 }
 
 // Yield a small bounding box (quadrant) to the consumer
-func (bBox BoundingBox) MakeGrid(cellSize int) chan BoundingBox {
-	numCols := (bBox.xMax - bBox.xMin) / cellSize
-	numRows := (bBox.yMax - bBox.yMin) / cellSize
+func (b BoundingBox) Grid(size int) chan BoundingBox {
+	numCols := (b.xMax - b.xMin) / size
+	numRows := (b.yMax - b.yMin) / size
 
 	// calculate remaining width/height if any
-	remainingWidth := (bBox.xMax - bBox.xMin) % cellSize
-	remainingHeight := (bBox.yMax - bBox.yMin) % cellSize
+	remainingWidth := (b.xMax - b.xMin) % size
+	remainingHeight := (b.yMax - b.yMin) % size
 
 	ch := make(chan BoundingBox)
 	produce := func() {
 		defer close(ch)
 		for i := range numRows {
 			for j := range numCols {
-				x := bBox.xMin + j*cellSize
-				y := bBox.yMin + i*cellSize
+				x := b.xMin + j*size
+				y := b.yMin + i*size
 
-				width := cellSize
+				width := size
 				if j == numCols-1 {
 					width += remainingWidth
 				}
 
-				height := cellSize
+				height := size
 				if i == numRows-1 {
 					height += remainingHeight
 				}
 
-				b := BoundingBox{x, y, x + width, y + height}
-				if bBox.xMax != b.xMax {
-					b.xMax--
+				q := BoundingBox{x, y, x + width, y + height}
+				if b.xMax != q.xMax {
+					q.xMax--
 				}
-				if bBox.yMax != b.yMax {
-					b.yMax--
+				if b.yMax != q.yMax {
+					q.yMax--
 				}
-				ch <- b // yield quadrant to the consumer
+				ch <- q // yield quadrant to the consumer
 			}
 		}
 	}
 	go produce()
 	return ch
+}
+
+func (b BoundingBox) Count(p BoundingBox, graph Graph) (r int) {
+
+	if b.xMax <= b.xMin && b.yMax <= b.yMin {
+		return
+	}
+
+	for x := b.xMin + 1; x < b.xMax; x++ {
+		r += (P{x, b.yMin}).castRay(graph, p)
+		r += (P{x, b.yMax}).castRay(graph, p)
+	}
+	for y := b.yMin; y <= b.yMax; y++ {
+		r += (P{b.xMin, y}).castRay(graph, p)
+		r += (P{b.xMax, y}).castRay(graph, p)
+	}
+
+	if r == 0 {
+		return
+	}
+
+	b = BoundingBox{b.xMin + 1, b.yMin + 1, b.xMax - 1, b.yMax - 1}
+	return r + b.Count(p, graph)
 }

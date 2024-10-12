@@ -17,7 +17,7 @@ func parseFile(path string, fn processLine) (Graph, BoundingBox) {
 	utils.Check(err)
 	defer file.Close()
 
-	graph, bBox := make(Graph), BoundingBox{}
+	graph, b := make(Graph), BoundingBox{}
 	current := P{0, 0}
 	graph[current] = struct{}{}
 
@@ -36,42 +36,42 @@ func parseFile(path string, fn processLine) (Graph, BoundingBox) {
 				current = P{x, y}
 				graph[current] = struct{}{}
 			}
-			bBox.xMax = max(x, bBox.xMax)
+			b.xMax = max(x, b.xMax)
 		case "D":
 			for range steps {
 				x--
 				current = P{x, y}
 				graph[current] = struct{}{}
 			}
-			bBox.xMin = min(x, bBox.xMin)
+			b.xMin = min(x, b.xMin)
 		case "L":
 			for range steps {
 				y--
 				current = P{x, y}
 				graph[current] = struct{}{}
 			}
-			bBox.yMin = min(y, bBox.yMin)
+			b.yMin = min(y, b.yMin)
 		case "R":
 			for range steps {
 				y++
 				current = P{x, y}
 				graph[current] = struct{}{}
 			}
-			bBox.yMax = max(y, bBox.yMax)
+			b.yMax = max(y, b.yMax)
 		}
 	}
-	return graph, bBox
+	return graph, b
 }
 
-func (p P) castRay(graph Graph, bBox BoundingBox) bool {
+func (p P) castRay(graph Graph, b BoundingBox) int {
 	// the point is on the polygon
 	if _, ok := graph[p]; ok {
-		return true
+		return 1
 	}
 
 	count := 0
 	// count diagonal ray interections with the polygon
-	for i := 1; p.x+i <= bBox.xMax && p.y+i <= bBox.yMax; i++ {
+	for i := 1; p.x+i <= b.xMax && p.y+i <= b.yMax; i++ {
 		xi, yi := p.x+i, p.y+i
 
 		// check if it's NOT an intersection with the polygon
@@ -94,5 +94,9 @@ func (p P) castRay(graph Graph, bBox BoundingBox) bool {
 	}
 	// Odd number of interesections means
 	// the point is inside inside the polygon
-	return count%2 != 0
+	if count%2 != 0 {
+		return 1
+	}
+
+	return 0
 }
