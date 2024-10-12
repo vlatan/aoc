@@ -131,6 +131,6 @@ func main() {
 	// https://adventofcode.com/2023/day/17
 	fmt.Println("Day 18: Lavaduct Lagoon")
 	day18.Part1()
-	// day18.Part2()
+	day18.Part2()
 
 }
