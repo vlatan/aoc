@@ -8,12 +8,7 @@ import (
 // https://adventofcode.com/2023/day/18
 func Part1() {
 	graph, bBox := parseFile("18/input.txt", processLine1)
-	result := 0
-	for x := bBox.xMin; x <= bBox.xMax; x++ {
-		for y := bBox.yMin; y <= bBox.yMax; y++ {
-			result += (P{x, y}).castRay(graph, bBox)
-		}
-	}
+	result := bBox.Count(&bBox, graph)
 	fmt.Println(result)
 }
 

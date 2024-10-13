@@ -8,20 +8,21 @@ import (
 )
 
 type P struct{ x, y int }
-type Graph map[P]struct{}
+type Polygon map[P]struct{}
 type BoundingBox struct{ xMin, yMin, xMax, yMax int }
 type processLine func([]string) (string, uint64)
 
-func parseFile(path string, fn processLine) (Graph, BoundingBox) {
+func parseFile(path string, fn processLine) (Polygon, BoundingBox) {
 	file, err := os.Open(path)
 	utils.Check(err)
 	defer file.Close()
 
-	graph, b := make(Graph), BoundingBox{}
+	graph, b := make(Polygon), BoundingBox{}
 	current := P{0, 0}
 	graph[current] = struct{}{}
 
 	// TODO: Work with just the edges of the polygon, not every point
+	// It will change the way how func castRay works
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -63,7 +64,7 @@ func parseFile(path string, fn processLine) (Graph, BoundingBox) {
 	return graph, b
 }
 
-func (p P) castRay(graph Graph, b BoundingBox) int {
+func (p P) castRay(graph Polygon, b BoundingBox) int {
 	// the point is on the polygon
 	if _, ok := graph[p]; ok {
 		return 1
@@ -99,4 +100,96 @@ func (p P) castRay(graph Graph, b BoundingBox) int {
 	}
 
 	return 0
+}
+
+// Yield a small bounding box (quadrant) to the consumer
+func (b BoundingBox) Grid(size int) chan BoundingBox {
+	numCols := (b.xMax - b.xMin) / size
+	numRows := (b.yMax - b.yMin) / size
+
+	// calculate remaining width/height if any
+	remainingWidth := (b.xMax - b.xMin) % size
+	remainingHeight := (b.yMax - b.yMin) % size
+
+	ch := make(chan BoundingBox)
+	produce := func() {
+		defer close(ch)
+		for i := range numRows {
+			for j := range numCols {
+				x := b.xMin + j*size
+				y := b.yMin + i*size
+
+				width := size
+				if j == numCols-1 {
+					width += remainingWidth
+				}
+
+				height := size
+				if i == numRows-1 {
+					height += remainingHeight
+				}
+
+				q := BoundingBox{x, y, x + width, y + height}
+				if b.xMax != q.xMax {
+					q.xMax--
+				}
+				if b.yMax != q.yMax {
+					q.yMax--
+				}
+				ch <- q // yield quadrant to the consumer
+			}
+		}
+	}
+	go produce()
+	return ch
+}
+
+// Recursivelly count quadrant perimeter points if they are in the polygon
+func (b BoundingBox) Count(pb *BoundingBox, graph Polygon) (r int) {
+
+	// the bounding box is exausted
+	if b.xMax < b.xMin || b.yMax < b.yMin {
+		return
+	}
+
+	// one point left
+	if b.xMax == b.xMin && b.yMax == b.yMin {
+		r += (P{b.xMax, b.yMax}).castRay(graph, *pb)
+		return
+	}
+
+	// one column left
+	if b.xMax == b.xMin && b.yMax > b.yMin {
+		for y := b.yMin; y <= b.yMax; y++ {
+			r += (P{b.xMax, y}).castRay(graph, *pb)
+		}
+		return
+	}
+
+	// one row left
+	if b.xMax > b.xMin && b.yMax == b.yMin {
+		for x := b.xMin; x <= b.xMax; x++ {
+			r += (P{x, b.yMax}).castRay(graph, *pb)
+		}
+		return
+	}
+
+	// process perimeter
+	for x := b.xMin + 1; x < b.xMax; x++ {
+		r += (P{x, b.yMin}).castRay(graph, *pb)
+		r += (P{x, b.yMax}).castRay(graph, *pb)
+	}
+
+	for y := b.yMin; y <= b.yMax; y++ {
+		r += (P{b.xMin, y}).castRay(graph, *pb)
+		r += (P{b.xMax, y}).castRay(graph, *pb)
+	}
+
+	if r == 0 {
+		return
+	}
+
+	// size down the bounding box
+	b = BoundingBox{b.xMin + 1, b.yMin + 1, b.xMax - 1, b.yMax - 1}
+	return r + b.Count(pb, graph)
 }
