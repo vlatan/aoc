@@ -3,6 +3,7 @@ package day18
 import (
 	"aoc/2023/utils"
 	"bufio"
+	"fmt"
 	"os"
 	"strings"
 )
@@ -59,19 +60,15 @@ func (point P) castRay(polygon Polygon) (r int) {
 		nextVertex := polygon[(i+1)%len(polygon)]
 		xj, yj := nextVertex.x, nextVertex.y
 
-		// the range of the edge
+		// is the point within the edge range
 		inXRange := (xi <= x && x <= xj) || (xi >= x && x >= xj)
 		inYRange := (yi <= y && y <= yj) || (yi >= y && y >= yj)
 
 		// check if the point is ON the edge
-		if yi == yj && inXRange {
-			if y == yi {
-				return 1
-			}
-		} else if xi == xj && inYRange {
-			if x == xi {
-				return 1
-			}
+		onVEdge := yi == yj && y == yi && inXRange
+		onHEdge := xi == xj && x == xi && inYRange
+		if onVEdge || onHEdge {
+			return 1
 		}
 
 		// On horizontal edge trim corners accordingly.
@@ -84,12 +81,11 @@ func (point P) castRay(polygon Polygon) (r int) {
 		}
 
 		// If this is a horizontal edge and the point is vertically BEFORE the edge,
-		// and within the edge range count the edge, meaning
+		// and within the edge's X range, count an intersection with the edge, meaning
 		// flip the rezult from 0 to 1, or vice-versa.
 		if yi == yj && y > yi && inXRange {
 			r = 1 - r
 		}
-
 	}
 	return
 }
@@ -178,6 +174,7 @@ func (b Box) Count(polygon Polygon) (r int) {
 	}
 
 	if r == 0 {
+		fmt.Println(b, "Quadrant discarded")
 		return
 	}
 
