@@ -42,14 +42,14 @@ func parseFile(path string, fn processLine) (Polygon, int) {
 }
 
 // Shoelace formula is calculating the area of a polygon on a cartesian plane.
-// But, actually only L/2 - 1 of the border is included in this area because the
+// But, only L/2 - 1 of the border is included in this area because the
 // coordinates of the vertices are actually in the center of the squares that they
-// reprsent. So the border according to this formula is passing through the middle
+// reprsent. So the border line according to this formula is passing through the middle
 // of the border squares. Therefore 1/2 of each square on the border is included
 // in this area plus 1/4 or 3/4 of the squares on the corners depending on where they're facing.
 // It turns out in a simple polygon the convex corners (those that add 1/4 to the area)
-// always win by 4. All the other corners in pairs comprise 1/4 + 3/4 which can be said to
-// to be 1/2 + 1/2, meaning they are treated the same as the other non-corner squares.
+// always win by 4. All the other corners in pairs comprise 1/4 + 3/4 which is 1/2 + 1/2
+// meaning they are treated the same as the other non-corner squares.
 // Obviously, these four unpaired corners contribute one whole square 4 * 1/4 = 1.
 // So the border amount included in this area is actually (L-4)/2 + 1 = L/2 - 1.
 // Having said that, if you want to include the WHOLE border in the area of the polygon

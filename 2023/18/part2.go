@@ -7,22 +7,12 @@ import (
 
 // https://adventofcode.com/2023/day/18
 func Part2() {
-	polygon, perimeter := parseFile("18/input.txt", processLine2)
+	polygon, perimeter := parseFile("18/input.txt", color)
 	fmt.Println(area(polygon, perimeter))
 }
 
-func processLine2(fields []string) (string, int) {
+func color(fields []string) (string, int) {
 	steps, _ := strconv.ParseInt(fields[2][2:7], 16, 64)
-	direction := ""
-	switch fields[2][7] {
-	case '0':
-		direction = "R"
-	case '1':
-		direction = "D"
-	case '2':
-		direction = "L"
-	case '3':
-		direction = "U"
-	}
-	return direction, int(steps)
+	direction := map[byte]string{'0': "R", '1': "D", '2': "L", '3': "U"}
+	return direction[fields[2][7]], int(steps)
 }
