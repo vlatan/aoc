@@ -48,17 +48,22 @@ func parseFile(path string, fn processLine) (Polygon, Box) {
 	return polygon[:len(polygon)-1], box
 }
 
+// The ray is casted vertically downwards
 func (point P) castRay(polygon Polygon) (r int) {
-	// fmt.Println(point)
 	x, y := point.x, point.y
+	// go through the vertexes and construct each edge
 	for i, currentVertex := range polygon {
+
+		// starting and ending points of the edge
 		xi, yi := currentVertex.x, currentVertex.y
 		nextVertex := polygon[(i+1)%len(polygon)]
 		xj, yj := nextVertex.x, nextVertex.y
 
+		// the range of the edge
 		inXRange := (xi <= x && x <= xj) || (xi >= x && x >= xj)
 		inYRange := (yi <= y && y <= yj) || (yi >= y && y >= yj)
 
+		// check if the point is ON the edge
 		if yi == yj && inXRange {
 			if y == yi {
 				return 1
@@ -69,20 +74,23 @@ func (point P) castRay(polygon Polygon) (r int) {
 			}
 		}
 
+		// On horizontal edge trim corners accordingly.
+		// If edge goes from left to right trim the ending vertex.
+		// If edge goes from right to left trim the starting vertex.
 		if xi < xj {
 			inXRange = (xi <= x && x <= xj-1) || (xi >= x && x >= xj-1)
 		} else if xi > xj {
 			inXRange = (xi-1 <= x && x <= xj) || (xi-1 >= x && x >= xj)
 		}
 
+		// If this is a horizontal edge and the point is vertically BEFORE the edge,
+		// and within the edge range count the edge, meaning
+		// flip the rezult from 0 to 1, or vice-versa.
 		if yi == yj && y > yi && inXRange {
 			r = 1 - r
 		}
 
 	}
-	// if r == 1 {
-	// 	fmt.Println(point, "INSIDE")
-	// }
 	return
 }
 

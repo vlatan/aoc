@@ -10,6 +10,7 @@ import (
 // https://adventofcode.com/2023/day/18
 func Part2() {
 	polygon, box := parseFile("18/input.txt", processLine2)
+	fmt.Println(box)
 	result := 0
 	fmt.Println("Polygon done")
 	start := time.Now()
@@ -17,12 +18,14 @@ func Part2() {
 	elapsed := time.Since(start)
 	log.Printf("Grid made in %s.", elapsed)
 	for b := range grid {
-		start = time.Now()
+		// start = time.Now()
 		result += b.Count(polygon)
-		elapsed = time.Since(start)
-		log.Printf("Grid counted in %s", elapsed)
+		// elapsed = time.Since(start)
+		// log.Printf("Grid counted in %s", elapsed)
 
 	}
+	elapsed = time.Since(start)
+	log.Printf("Done in: %s", elapsed)
 	fmt.Println(result)
 }
 
