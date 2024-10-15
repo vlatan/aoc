@@ -8,102 +8,86 @@ import (
 )
 
 type P struct{ x, y int }
-type Polygon map[P]struct{}
-type BoundingBox struct{ xMin, yMin, xMax, yMax int }
-type processLine func([]string) (string, uint64)
+type Polygon []P
+type Box struct{ xMin, yMin, xMax, yMax int }
+type processLine func([]string) (string, int)
 
-func parseFile(path string, fn processLine) (Polygon, BoundingBox) {
+func parseFile(path string, fn processLine) (Polygon, Box) {
 	file, err := os.Open(path)
 	utils.Check(err)
 	defer file.Close()
 
-	graph, b := make(Polygon), BoundingBox{}
-	current := P{0, 0}
-	graph[current] = struct{}{}
-
-	// TODO: Work with just the edges of the polygon, not every point
-	// It will change the way how func castRay works
+	vertex := P{0, 0}
+	polygon, box := Polygon{vertex}, Box{}
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		fields := strings.Fields(scanner.Text())
 		direction, steps := fn(fields)
-		x, y := current.x, current.y
+		x, y := vertex.x, vertex.y
 
 		switch direction {
 		case "U":
-			for range steps {
-				x++
-				current = P{x, y}
-				graph[current] = struct{}{}
-			}
-			b.xMax = max(x, b.xMax)
+			vertex = P{x, y + steps}
+			polygon = append(polygon, vertex)
+			box.yMax = max(y+steps, box.yMax)
 		case "D":
-			for range steps {
-				x--
-				current = P{x, y}
-				graph[current] = struct{}{}
-			}
-			b.xMin = min(x, b.xMin)
+			vertex = P{x, y - steps}
+			polygon = append(polygon, vertex)
+			box.yMin = min(y-steps, box.yMin)
 		case "L":
-			for range steps {
-				y--
-				current = P{x, y}
-				graph[current] = struct{}{}
-			}
-			b.yMin = min(y, b.yMin)
+			vertex = P{x - steps, y}
+			polygon = append(polygon, vertex)
+			box.xMin = min(x-steps, box.xMin)
 		case "R":
-			for range steps {
-				y++
-				current = P{x, y}
-				graph[current] = struct{}{}
-			}
-			b.yMax = max(y, b.yMax)
+			vertex = P{x + steps, y}
+			polygon = append(polygon, vertex)
+			box.xMax = max(x+steps, box.xMax)
 		}
 	}
-	return graph, b
+	return polygon[:len(polygon)-1], box
 }
 
-func (p P) castRay(graph Polygon, b BoundingBox) int {
-	// the point is on the polygon
-	if _, ok := graph[p]; ok {
-		return 1
-	}
+func (point P) castRay(polygon Polygon) (r int) {
+	// fmt.Println(point)
+	x, y := point.x, point.y
+	for i, currentVertex := range polygon {
+		xi, yi := currentVertex.x, currentVertex.y
+		nextVertex := polygon[(i+1)%len(polygon)]
+		xj, yj := nextVertex.x, nextVertex.y
 
-	count := 0
-	// count diagonal ray interections with the polygon
-	for i := 1; p.x+i <= b.xMax && p.y+i <= b.yMax; i++ {
-		xi, yi := p.x+i, p.y+i
+		inXRange := (xi <= x && x <= xj) || (xi >= x && x >= xj)
+		inYRange := (yi <= y && y <= yj) || (yi >= y && y >= yj)
 
-		// check if it's NOT an intersection with the polygon
-		if _, ok := graph[P{xi, yi}]; !ok {
-			continue
+		if yi == yj && inXRange {
+			if y == yi {
+				return 1
+			}
+		} else if xi == xj && inYRange {
+			if x == xi {
+				return 1
+			}
 		}
 
-		// Check left/down or up/right neighbours to see
-		// if the ray is just grazing a corner on the outside.
-		// If so, do not count as an intersection.
-		_, left := graph[P{xi, yi - 1}]
-		_, down := graph[P{xi + 1, yi}]
-		_, right := graph[P{xi, yi + 1}]
-		_, up := graph[P{xi - 1, yi}]
-		if (left && down) || (up && right) {
-			continue
+		if xi < xj {
+			inXRange = (xi <= x && x <= xj-1) || (xi >= x && x >= xj-1)
+		} else if xi > xj {
+			inXRange = (xi-1 <= x && x <= xj) || (xi-1 >= x && x >= xj)
 		}
 
-		count++
-	}
-	// Odd number of interesections means
-	// the point is inside inside the polygon
-	if count%2 != 0 {
-		return 1
-	}
+		if yi == yj && y > yi && inXRange {
+			r = 1 - r
+		}
 
-	return 0
+	}
+	// if r == 1 {
+	// 	fmt.Println(point, "INSIDE")
+	// }
+	return
 }
 
 // Yield a small bounding box (quadrant) to the consumer
-func (b BoundingBox) Grid(size int) chan BoundingBox {
+func (b Box) Grid(size int) chan Box {
 	numCols := (b.xMax - b.xMin) / size
 	numRows := (b.yMax - b.yMin) / size
 
@@ -111,7 +95,7 @@ func (b BoundingBox) Grid(size int) chan BoundingBox {
 	remainingWidth := (b.xMax - b.xMin) % size
 	remainingHeight := (b.yMax - b.yMin) % size
 
-	ch := make(chan BoundingBox)
+	ch := make(chan Box)
 	produce := func() {
 		defer close(ch)
 		for i := range numRows {
@@ -129,7 +113,7 @@ func (b BoundingBox) Grid(size int) chan BoundingBox {
 					height += remainingHeight
 				}
 
-				q := BoundingBox{x, y, x + width, y + height}
+				q := Box{x, y, x + width, y + height}
 				if b.xMax != q.xMax {
 					q.xMax--
 				}
@@ -145,7 +129,7 @@ func (b BoundingBox) Grid(size int) chan BoundingBox {
 }
 
 // Recursivelly count quadrant perimeter points if they are in the polygon
-func (b BoundingBox) Count(pb *BoundingBox, graph Polygon) (r int) {
+func (b Box) Count(polygon Polygon) (r int) {
 
 	// the bounding box is exausted
 	if b.xMax < b.xMin || b.yMax < b.yMin {
@@ -154,14 +138,14 @@ func (b BoundingBox) Count(pb *BoundingBox, graph Polygon) (r int) {
 
 	// one point left
 	if b.xMax == b.xMin && b.yMax == b.yMin {
-		r += (P{b.xMax, b.yMax}).castRay(graph, *pb)
+		r += (P{b.xMax, b.yMax}).castRay(polygon)
 		return
 	}
 
 	// one column left
 	if b.xMax == b.xMin && b.yMax > b.yMin {
 		for y := b.yMin; y <= b.yMax; y++ {
-			r += (P{b.xMax, y}).castRay(graph, *pb)
+			r += (P{b.xMax, y}).castRay(polygon)
 		}
 		return
 	}
@@ -169,20 +153,20 @@ func (b BoundingBox) Count(pb *BoundingBox, graph Polygon) (r int) {
 	// one row left
 	if b.xMax > b.xMin && b.yMax == b.yMin {
 		for x := b.xMin; x <= b.xMax; x++ {
-			r += (P{x, b.yMax}).castRay(graph, *pb)
+			r += (P{x, b.yMax}).castRay(polygon)
 		}
 		return
 	}
 
 	// process perimeter
 	for x := b.xMin + 1; x < b.xMax; x++ {
-		r += (P{x, b.yMin}).castRay(graph, *pb)
-		r += (P{x, b.yMax}).castRay(graph, *pb)
+		r += (P{x, b.yMin}).castRay(polygon)
+		r += (P{x, b.yMax}).castRay(polygon)
 	}
 
 	for y := b.yMin; y <= b.yMax; y++ {
-		r += (P{b.xMin, y}).castRay(graph, *pb)
-		r += (P{b.xMax, y}).castRay(graph, *pb)
+		r += (P{b.xMin, y}).castRay(polygon)
+		r += (P{b.xMax, y}).castRay(polygon)
 	}
 
 	if r == 0 {
@@ -190,6 +174,6 @@ func (b BoundingBox) Count(pb *BoundingBox, graph Polygon) (r int) {
 	}
 
 	// size down the bounding box
-	b = BoundingBox{b.xMin + 1, b.yMin + 1, b.xMax - 1, b.yMax - 1}
-	return r + b.Count(pb, graph)
+	b = Box{b.xMin + 1, b.yMin + 1, b.xMax - 1, b.yMax - 1}
+	return r + b.Count(polygon)
 }

@@ -9,16 +9,16 @@ import (
 
 // https://adventofcode.com/2023/day/18
 func Part2() {
-	graph, pb := parseFile("18/input.txt", processLine2)
+	polygon, box := parseFile("18/input.txt", processLine2)
 	result := 0
 	fmt.Println("Polygon done")
 	start := time.Now()
-	grid := pb.Grid(1000)
+	grid := box.Grid(1000)
 	elapsed := time.Since(start)
 	log.Printf("Grid made in %s.", elapsed)
 	for b := range grid {
 		start = time.Now()
-		result += b.Count(&pb, graph)
+		result += b.Count(polygon)
 		elapsed = time.Since(start)
 		log.Printf("Grid counted in %s", elapsed)
 
@@ -26,7 +26,7 @@ func Part2() {
 	fmt.Println(result)
 }
 
-func processLine2(fields []string) (string, uint64) {
+func processLine2(fields []string) (string, int) {
 	steps, _ := strconv.ParseUint(fields[2][2:7], 16, 32)
 	direction := ""
 	switch fields[2][7] {
@@ -39,5 +39,5 @@ func processLine2(fields []string) (string, uint64) {
 	case '3':
 		direction = "U"
 	}
-	return direction, steps
+	return direction, int(steps)
 }
