@@ -1,4 +1,4 @@
-package gear
+package day03
 
 type pos struct {
 	x, y int

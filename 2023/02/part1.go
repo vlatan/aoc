@@ -1,4 +1,4 @@
-package cube
+package day02
 
 import (
 	"aoc/2023/utils"
@@ -11,7 +11,7 @@ import (
 var maxCubes = map[string]int{"red": 12, "green": 13, "blue": 14}
 
 // https://adventofcode.com/2023/day/2
-func CubeConundrumPartOne() {
+func Part1() {
 	file, err := os.Open("02/input.txt")
 	utils.Check(err)
 	defer file.Close()
@@ -39,5 +39,5 @@ func CubeConundrumPartOne() {
 			result += utils.ToInteger(game[1])
 		}
 	}
-	fmt.Println(result)
+	fmt.Println("Part 1:", result)
 }

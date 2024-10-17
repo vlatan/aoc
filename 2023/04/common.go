@@ -1,4 +1,4 @@
-package scratchcards
+package day04
 
 import "strings"
 

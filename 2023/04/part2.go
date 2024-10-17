@@ -1,4 +1,4 @@
-package scratchcards
+package day04
 
 import (
 	"aoc/2023/utils"
@@ -9,7 +9,7 @@ import (
 )
 
 // https://adventofcode.com/2023/day/4
-func ScratchcardsPartTwo() {
+func Part2() {
 	file, err := os.Open("04/input.txt")
 	utils.Check(err)
 	defer file.Close()
@@ -30,7 +30,7 @@ func ScratchcardsPartTwo() {
 	for gameID := range cache {
 		sum += processCard(gameID, cache)
 	}
-	fmt.Println(sum)
+	fmt.Println("Part 2:", sum)
 }
 
 // Recursive function to count total number of cards

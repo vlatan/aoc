@@ -1,4 +1,4 @@
-package trebuchet
+package day01
 
 import (
 	"aoc/2023/utils"
@@ -9,7 +9,7 @@ import (
 
 // '0' -> 48, '9' -> 57
 // https://adventofcode.com/2023/day/1
-func TrebuchetPartOne() {
+func Part1() {
 	file, err := os.Open("01/input.txt")
 	utils.Check(err)
 	defer file.Close()
@@ -19,7 +19,7 @@ func TrebuchetPartOne() {
 		line := scanner.Text()
 		sum += firstDigit(line)*10 + lastDigit(line)
 	}
-	fmt.Println(sum)
+	fmt.Println("Part 1:", sum)
 }
 
 func firstDigit(s string) int {

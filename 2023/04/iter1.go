@@ -1,4 +1,4 @@
-package scratchcards
+package day04
 
 import (
 	"aoc/2023/utils"
@@ -10,7 +10,7 @@ import (
 
 // One iteration per line solution of D4P1
 // https://adventofcode.com/2023/day/4
-func ScratchcardsOneIter() {
+func IterPart1() {
 	file, err := os.Open("04/input.txt")
 	utils.Check(err)
 	defer file.Close()
@@ -43,7 +43,7 @@ func ScratchcardsOneIter() {
 			}
 		}
 	}
-	fmt.Println(result)
+	fmt.Println("Iter Part 1:", result)
 }
 
 // Advance through string and return num and new index when no more digits

@@ -1,4 +1,4 @@
-package cube
+package day02
 
 import (
 	"aoc/2023/utils"
@@ -9,7 +9,7 @@ import (
 )
 
 // https://adventofcode.com/2023/day/2
-func CubeConundrumPartTwo() {
+func Part2() {
 	file, err := os.Open("02/input.txt")
 	utils.Check(err)
 	defer file.Close()
@@ -37,5 +37,5 @@ func CubeConundrumPartTwo() {
 		}
 		result += setResult
 	}
-	fmt.Println(result)
+	fmt.Println("Part 2:", result)
 }

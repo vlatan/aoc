@@ -1,4 +1,4 @@
-package seed
+package day05
 
 import (
 	"aoc/2023/utils"

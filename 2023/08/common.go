@@ -1,4 +1,4 @@
-package wasteland
+package day08
 
 import (
 	"aoc/2023/utils"

@@ -1,4 +1,4 @@
-package camel
+package day07
 
 import (
 	"aoc/2023/utils"

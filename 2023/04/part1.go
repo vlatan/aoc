@@ -1,4 +1,4 @@
-package scratchcards
+package day04
 
 import (
 	"aoc/2023/utils"
@@ -10,7 +10,7 @@ import (
 )
 
 // https://adventofcode.com/2023/day/4
-func ScratchcardsPartOne() {
+func Part1() {
 	file, err := os.Open("04/input.txt")
 	utils.Check(err)
 	defer file.Close()
@@ -26,5 +26,5 @@ func ScratchcardsPartOne() {
 		}
 		result += int(math.Pow(2, count-1))
 	}
-	fmt.Println(result)
+	fmt.Println("Part 1:", result)
 }

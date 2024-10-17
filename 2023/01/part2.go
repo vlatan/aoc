@@ -1,4 +1,4 @@
-package trebuchet
+package day01
 
 import (
 	"aoc/2023/utils"
@@ -11,7 +11,7 @@ import (
 var words = []string{"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
 
 // https://adventofcode.com/2023/day/1
-func TrebuchetPartTwo() {
+func Part2() {
 	file, err := os.Open("01/input.txt")
 	utils.Check(err)
 	defer file.Close()
@@ -23,7 +23,7 @@ func TrebuchetPartTwo() {
 		sum += firstNumber(line)*10 + lastNumber(line)
 	}
 
-	fmt.Println(sum)
+	fmt.Println("Part 2:", sum)
 }
 
 func firstNumber(s string) int {

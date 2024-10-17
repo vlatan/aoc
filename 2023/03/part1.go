@@ -1,4 +1,4 @@
-package gear
+package day03
 
 import (
 	"aoc/2023/utils"
@@ -6,7 +6,7 @@ import (
 )
 
 // https://adventofcode.com/2023/day/3
-func GearRatiosPartOne() {
+func Part1() {
 	result, matrix := 0, utils.ParseFile("03/input.txt")
 	// iterate over the two-dimensional array
 	for x := 0; x < len(matrix); x++ {
@@ -28,5 +28,5 @@ func GearRatiosPartOne() {
 			}
 		}
 	}
-	fmt.Println(result)
+	fmt.Println("Part 1:", result)
 }

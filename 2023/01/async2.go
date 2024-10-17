@@ -1,4 +1,4 @@
-package trebuchet
+package day01
 
 import (
 	"aoc/2023/utils"
@@ -28,7 +28,7 @@ func (s *safeSum) String() string {
 
 // Implementation with goroutines, sync.Mutex and sync.WaitGroup
 // https://adventofcode.com/2023/day/1
-func TrebuchetASyncPartTwo() {
+func AsyncPart2() {
 	file, err := os.Open("01/input.txt")
 	utils.Check(err)
 	defer file.Close()
@@ -45,7 +45,7 @@ func TrebuchetASyncPartTwo() {
 	}
 
 	wg.Wait()
-	fmt.Println(&sum)
+	fmt.Println("Async Part 2:", &sum)
 }
 
 func firstNum(s string, sum *safeSum, wg *sync.WaitGroup) {

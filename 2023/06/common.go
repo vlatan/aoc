@@ -1,4 +1,4 @@
-package wait
+package day06
 
 import (
 	"aoc/2023/utils"
