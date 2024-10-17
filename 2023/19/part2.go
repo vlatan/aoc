@@ -1,7 +1,7 @@
 package day19
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"fmt"
 	"maps"
 	"strings"
@@ -54,7 +54,7 @@ func (workflow Workflow) NextWorkflows(state RatingState) (r []WorkflowState) {
 
 		if comparison := strings.Split(parts[0], ">"); len(comparison) == 2 {
 			stateRange := state[comparison[0]]
-			value := utils.ToInteger(comparison[1])
+			value := common.ToInteger(comparison[1])
 			if stateRange.from <= value && value <= stateRange.to {
 				currentState := maps.Clone(state)
 				currentState[comparison[0]] = Range{value + 1, stateRange.to}
@@ -66,7 +66,7 @@ func (workflow Workflow) NextWorkflows(state RatingState) (r []WorkflowState) {
 
 		if comparison := strings.Split(parts[0], "<"); len(comparison) == 2 {
 			stateRange := state[comparison[0]]
-			value := utils.ToInteger(comparison[1])
+			value := common.ToInteger(comparison[1])
 			if stateRange.from <= value && value <= stateRange.to {
 				currentState := maps.Clone(state)
 				currentState[comparison[0]] = Range{stateRange.from, value - 1}

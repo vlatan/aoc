@@ -1,7 +1,7 @@
 package day10
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"os"
 	"strings"
@@ -22,7 +22,7 @@ type Graph map[Loc]*Node
 // Create Graph from matrix
 func parseFile(path string) ([]string, *Node) {
 	file, err := os.Open(path)
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)

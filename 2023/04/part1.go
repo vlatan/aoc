@@ -1,7 +1,7 @@
 package day04
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"fmt"
 	"math"
@@ -12,7 +12,7 @@ import (
 // https://adventofcode.com/2023/day/4
 func Part1() {
 	file, err := os.Open("04/input.txt")
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 	result, scanner := 0, bufio.NewScanner(file)
 	for scanner.Scan() {

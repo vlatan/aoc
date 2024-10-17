@@ -1,7 +1,7 @@
 package day06
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"fmt"
 	"strings"
 )
@@ -9,8 +9,8 @@ import (
 // https://adventofcode.com/2023/day/6
 func WaitForItPartTwo() {
 	times, distances := parseFile("06/input.txt")
-	time := utils.ToInteger(strings.Join(times, ""))
-	distance := utils.ToInteger(strings.Join(distances, ""))
+	time := common.ToInteger(strings.Join(times, ""))
+	distance := common.ToInteger(strings.Join(distances, ""))
 
 	count := 0
 	for sec := 0; sec <= time; sec++ {

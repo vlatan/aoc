@@ -1,14 +1,14 @@
 package day15
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"os"
 	"strings"
 )
 
 func parseFile(path string) []string {
 	content, err := os.ReadFile(path)
-	utils.Check(err)
+	common.Check(err)
 	return strings.Split(string(content), ",")
 }
 

@@ -1,7 +1,7 @@
 package day09
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"fmt"
 )
 
@@ -17,7 +17,7 @@ func Part1() {
 			}
 			lastNums = append(lastNums, current[len(current)-1])
 			if allZeroes(current) {
-				result += utils.Sum(lastNums)
+				result += common.Sum(lastNums)
 				break
 			}
 			history = current

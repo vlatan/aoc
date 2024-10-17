@@ -1,7 +1,7 @@
 package day11
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"os"
 )
@@ -14,7 +14,7 @@ type Space map[int]bool
 
 func parseFile(path string) (Matrix, []P, Space, Space) {
 	file, err := os.Open(path)
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 
 	matrix, galaxies := Matrix{}, []P{}

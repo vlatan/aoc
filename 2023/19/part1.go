@@ -1,7 +1,7 @@
 package day19
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"fmt"
 	"strings"
 )
@@ -41,14 +41,14 @@ func (workflow Workflow) NextWorkflow(rating Rating) string {
 		}
 
 		if comparison := strings.Split(parts[0], ">"); len(comparison) == 2 {
-			if rating[comparison[0]] > utils.ToInteger(comparison[1]) {
+			if rating[comparison[0]] > common.ToInteger(comparison[1]) {
 				return parts[1]
 			}
 			continue
 		}
 
 		comparison := strings.Split(parts[0], "<")
-		if rating[comparison[0]] < utils.ToInteger(comparison[1]) {
+		if rating[comparison[0]] < common.ToInteger(comparison[1]) {
 			return parts[1]
 		}
 	}

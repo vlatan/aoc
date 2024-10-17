@@ -1,7 +1,7 @@
 package day07
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"fmt"
 )
 
@@ -12,7 +12,7 @@ func CamelCardsPartOne() {
 	for i := 0; i < len(content); i++ {
 		hands[i] = Hand{
 			content[i][0],
-			utils.ToInteger(content[i][1]),
+			common.ToInteger(content[i][1]),
 			handStrength(content[i][0]),
 		}
 	}

@@ -1,7 +1,7 @@
 package day01
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"fmt"
 	"os"
@@ -13,7 +13,7 @@ var words = []string{"one", "two", "three", "four", "five", "six", "seven", "eig
 // https://adventofcode.com/2023/day/1
 func Part2() {
 	file, err := os.Open("01/input.txt")
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 
 	sum := 0
@@ -28,7 +28,7 @@ func Part2() {
 
 func firstNumber(s string) int {
 	for i := 0; i < len(s); i++ {
-		if utils.IsDigit(s[i]) {
+		if common.IsDigit(s[i]) {
 			return int(s[i] - '0')
 		}
 
@@ -43,7 +43,7 @@ func firstNumber(s string) int {
 
 func lastNumber(s string) int {
 	for i := len(s) - 1; i >= 0; i-- {
-		if utils.IsDigit(s[i]) {
+		if common.IsDigit(s[i]) {
 			return int(s[i] - '0')
 		}
 

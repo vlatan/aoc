@@ -1,7 +1,7 @@
 package day02
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"fmt"
 	"os"
@@ -11,7 +11,7 @@ import (
 // https://adventofcode.com/2023/day/2
 func Part2() {
 	file, err := os.Open("02/input.txt")
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 
 	result, scanner := 0, bufio.NewScanner(file)
@@ -25,7 +25,7 @@ func Part2() {
 			cubes := strings.Split(set, ", ")
 			for _, cube := range cubes {
 				cubeInfo := strings.Split(cube, " ")
-				numCubes := utils.ToInteger(cubeInfo[0])
+				numCubes := common.ToInteger(cubeInfo[0])
 				cubeColor := cubeInfo[1]
 				if minCubes[cubeColor] < numCubes {
 					minCubes[cubeColor] = numCubes

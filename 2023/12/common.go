@@ -1,7 +1,7 @@
 package day12
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"fmt"
 	"os"
@@ -13,7 +13,7 @@ type Cache map[string]int
 
 func parseFile(path string) ([]string, [][]int) {
 	file, err := os.Open(path)
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
@@ -24,7 +24,7 @@ func parseFile(path string) ([]string, [][]int) {
 		list := strings.Split(fields[1], ",")
 		group := make([]int, len(list))
 		for i := 0; i < len(list); i++ {
-			group[i] = utils.ToInteger(list[i])
+			group[i] = common.ToInteger(list[i])
 		}
 		groups = append(groups, group)
 	}

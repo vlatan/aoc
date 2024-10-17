@@ -1,7 +1,7 @@
 package day06
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"os"
 	"strings"
@@ -9,7 +9,7 @@ import (
 
 func parseFile(path string) ([]string, []string) {
 	file, err := os.Open(path)
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	scanner.Scan()

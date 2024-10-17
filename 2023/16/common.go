@@ -1,7 +1,7 @@
 package day16
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"fmt"
 	"os"
@@ -15,7 +15,7 @@ type Matrix [][]byte
 
 func parseFile(path string) (r Matrix) {
 	file, err := os.Open(path)
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)

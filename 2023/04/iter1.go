@@ -1,7 +1,7 @@
 package day04
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"fmt"
 	"math"
@@ -12,7 +12,7 @@ import (
 // https://adventofcode.com/2023/day/4
 func IterPart1() {
 	file, err := os.Open("04/input.txt")
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 
 	result, scanner := 0, bufio.NewScanner(file)
@@ -21,13 +21,13 @@ func IterPart1() {
 		for main_cursor := 0; main_cursor < len(line); main_cursor++ {
 			if line[main_cursor] == ':' {
 				for w := main_cursor + 1; w < len(line); w++ {
-					if utils.IsDigit(line[w]) {
+					if common.IsDigit(line[w]) {
 						new_cursor, num := constructNum(w, line)
 						w, winning[num] = new_cursor, true
 					} else if line[w] == '|' {
 						count := 0.0
 						for s := w + 1; s < len(line); s++ {
-							if utils.IsDigit(line[s]) {
+							if common.IsDigit(line[s]) {
 								new_cursor, num := constructNum(s, line)
 								s = new_cursor
 								if _, ok := winning[num]; ok {
@@ -50,7 +50,7 @@ func IterPart1() {
 func constructNum(cursor int, line string) (new_cursor int, num string) {
 	new_cursor, num = cursor, string(line[cursor])
 	for i := cursor + 1; i < len(line); i++ {
-		if !utils.IsDigit(line[i]) {
+		if !common.IsDigit(line[i]) {
 			break
 		}
 		num += string(line[i])

@@ -1,7 +1,7 @@
 package day13
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"os"
 	"slices"
@@ -12,7 +12,7 @@ type Pattern [][]byte
 // Parse file to a list of patterns
 func parseFile(path string) (r, t []Pattern) {
 	file, err := os.Open(path)
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)

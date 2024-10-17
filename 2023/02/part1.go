@@ -1,7 +1,7 @@
 package day02
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"fmt"
 	"os"
@@ -13,7 +13,7 @@ var maxCubes = map[string]int{"red": 12, "green": 13, "blue": 14}
 // https://adventofcode.com/2023/day/2
 func Part1() {
 	file, err := os.Open("02/input.txt")
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 
 	result, scanner := 0, bufio.NewScanner(file)
@@ -25,7 +25,7 @@ func Part1() {
 			cubes := strings.Split(set, ", ")
 			for _, cube := range cubes {
 				values := strings.Split(cube, " ")
-				if utils.ToInteger(values[0]) > maxCubes[values[1]] {
+				if common.ToInteger(values[0]) > maxCubes[values[1]] {
 					validGame = false
 					break
 				}
@@ -36,7 +36,7 @@ func Part1() {
 		}
 		if validGame {
 			game = strings.Split(game[0], " ")
-			result += utils.ToInteger(game[1])
+			result += common.ToInteger(game[1])
 		}
 	}
 	fmt.Println("Part 1:", result)

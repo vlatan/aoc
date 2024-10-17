@@ -1,7 +1,7 @@
 package day18
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"os"
 	"strings"
@@ -13,7 +13,7 @@ type processLine func([]string) (string, int)
 
 func parseFile(path string, fn processLine) (Polygon, int) {
 	file, err := os.Open(path)
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 
 	vertex := P{0, 0}

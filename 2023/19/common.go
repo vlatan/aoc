@@ -1,7 +1,7 @@
 package day19
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"os"
 	"strings"
@@ -13,7 +13,7 @@ type Rating map[string]int
 
 func parseFile(path string) (Workflows, []Rating) {
 	file, err := os.Open(path)
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	workflows, ratings := Workflows{}, []Rating{}
@@ -27,7 +27,7 @@ func parseFile(path string) (Workflows, []Rating) {
 			lineParts := strings.Split(line, ",")
 			for _, item := range lineParts {
 				itemParts := strings.Split(item, "=")
-				rating[itemParts[0]] = utils.ToInteger(itemParts[1])
+				rating[itemParts[0]] = common.ToInteger(itemParts[1])
 			}
 			ratings = append(ratings, rating)
 		} else {

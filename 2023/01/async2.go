@@ -1,7 +1,7 @@
 package day01
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"fmt"
 	"os"
@@ -30,7 +30,7 @@ func (s *safeSum) String() string {
 // https://adventofcode.com/2023/day/1
 func AsyncPart2() {
 	file, err := os.Open("01/input.txt")
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 
 	var sum safeSum
@@ -51,7 +51,7 @@ func AsyncPart2() {
 func firstNum(s string, sum *safeSum, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for i := 0; i < len(s); i++ {
-		if utils.IsDigit(s[i]) {
+		if common.IsDigit(s[i]) {
 			sum.add(int(s[i]-'0') * 10)
 			return
 		}
@@ -68,7 +68,7 @@ func firstNum(s string, sum *safeSum, wg *sync.WaitGroup) {
 func lastNum(s string, sum *safeSum, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for i := len(s) - 1; i >= 0; i-- {
-		if utils.IsDigit(s[i]) {
+		if common.IsDigit(s[i]) {
 			sum.add(int(s[i] - '0'))
 			return
 		}

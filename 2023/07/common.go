@@ -1,7 +1,7 @@
 package day07
 
 import (
-	"aoc/2023/utils"
+	"aoc/2023/common"
 	"bufio"
 	"os"
 	"sort"
@@ -22,7 +22,7 @@ var cardValues = map[rune]int{
 
 func parseFile(path string) [][]string {
 	file, err := os.Open(path)
-	utils.Check(err)
+	common.Check(err)
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	result := [][]string{}
