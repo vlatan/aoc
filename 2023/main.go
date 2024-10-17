@@ -138,6 +138,6 @@ func main() {
 	// https://adventofcode.com/2023/day/19
 	fmt.Println("Day 19: Aplenty")
 	day19.Part1()
-	// day19.Part2()
+	day19.Part2()
 
 }

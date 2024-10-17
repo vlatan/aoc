@@ -19,7 +19,7 @@ func Part1() {
 func solve(start string, workflows Workflows, rating Rating) int {
 	result, w := 0, workflows[start]
 
-	switch endCase := w.Next(rating); endCase {
+	switch endCase := w.NextWorkflow(rating); endCase {
 	case "A":
 		for _, r := range rating {
 			result += r
@@ -32,7 +32,7 @@ func solve(start string, workflows Workflows, rating Rating) int {
 	}
 }
 
-func (workflow Workflow) Next(rating Rating) string {
+func (workflow Workflow) NextWorkflow(rating Rating) string {
 	for _, w := range workflow {
 
 		parts := strings.Split(w, ":")
@@ -52,6 +52,5 @@ func (workflow Workflow) Next(rating Rating) string {
 			return parts[1]
 		}
 	}
-
 	return "A"
 }
