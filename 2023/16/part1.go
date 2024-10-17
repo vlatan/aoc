@@ -6,5 +6,5 @@ import "fmt"
 func Part1() {
 	matrix := parseFile("16/input.txt")
 	result := solve(matrix, Loc{0, 0}, "left")
-	fmt.Println(result)
+	fmt.Println("Part 1:", result)
 }

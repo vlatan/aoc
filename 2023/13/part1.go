@@ -11,5 +11,5 @@ func Part1() {
 	for i := 0; i < len(data); i++ {
 		result += calcRows(data[i], transposed[i], -1)
 	}
-	fmt.Println(result)
+	fmt.Println("Part 1:", result)
 }

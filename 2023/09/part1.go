@@ -23,5 +23,5 @@ func Part1() {
 			history = current
 		}
 	}
-	fmt.Println(result)
+	fmt.Println("Part 1:", result)
 }

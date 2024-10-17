@@ -7,9 +7,7 @@ import (
 	"strings"
 )
 
-type Loc struct {
-	x, y int
-}
+type Loc struct{ x, y int }
 
 type Node struct {
 	symbol    rune

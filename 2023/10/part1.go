@@ -8,5 +8,5 @@ import (
 func Part1() {
 	_, startNode := parseFile("10/input.txt")
 	loop := findLoop(startNode)
-	fmt.Println((len(loop) + 1) / 2)
+	fmt.Println("Part 1:", (len(loop)+1)/2)
 }

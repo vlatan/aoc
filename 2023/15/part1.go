@@ -9,5 +9,5 @@ func Part1() {
 	for _, s := range data {
 		sum += hash(s)
 	}
-	fmt.Println(sum)
+	fmt.Println("Part 1:", sum)
 }

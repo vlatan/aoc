@@ -3,7 +3,7 @@ package day05
 import "fmt"
 
 // https://adventofcode.com/2023/day/5
-func SeedPartTwo() {
+func Part2() {
 	seeds, maps := parseFile("05/input.txt")
 	for loc := 0; ; loc++ {
 		x := loc
@@ -12,7 +12,7 @@ func SeedPartTwo() {
 		}
 		for s := 0; s < len(seeds); s += 2 {
 			if x >= seeds[s] && x < seeds[s]+seeds[s+1] {
-				fmt.Println(loc)
+				fmt.Println("Part 2:", loc)
 				return
 			}
 		}

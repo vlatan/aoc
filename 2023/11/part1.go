@@ -6,5 +6,5 @@ import "fmt"
 func Part1() {
 	expansion := 2
 	result := shortestPathsSum(expansion)
-	fmt.Println(result)
+	fmt.Println("Part 1:", result)
 }

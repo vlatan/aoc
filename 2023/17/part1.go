@@ -7,7 +7,7 @@ func Part1() {
 	m := parseFile("17/input.txt")
 	start, end := P{0, 0}, P{len(m) - 1, len(m[0]) - 1}
 	result := solve(m, start, end, endState1, CreateNextStates1)
-	fmt.Println(result)
+	fmt.Println("Part 1:", result)
 }
 
 func endState1(s State, end P) bool {

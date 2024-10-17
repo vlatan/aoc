@@ -7,7 +7,7 @@ import (
 )
 
 // https://adventofcode.com/2023/day/6
-func WaitForItPartTwo() {
+func Part2() {
 	times, distances := parseFile("06/input.txt")
 	time := common.ToInteger(strings.Join(times, ""))
 	distance := common.ToInteger(strings.Join(distances, ""))
@@ -18,5 +18,5 @@ func WaitForItPartTwo() {
 			count++
 		}
 	}
-	fmt.Println(count)
+	fmt.Println("Part 2:", count)
 }

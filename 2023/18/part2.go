@@ -8,7 +8,7 @@ import (
 // https://adventofcode.com/2023/day/18
 func Part2() {
 	polygon, perimeter := parseFile("18/input.txt", color)
-	fmt.Println(area(polygon, perimeter))
+	fmt.Println("Part 2:", area(polygon, perimeter))
 }
 
 func color(fields []string) (string, int) {

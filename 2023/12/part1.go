@@ -11,5 +11,5 @@ func Part1() {
 	for i := 0; i < len(lines); i++ {
 		result += solve(lines[i], groups[i], Cache{})
 	}
-	fmt.Println(result)
+	fmt.Println("Part 1:", result)
 }

@@ -7,7 +7,7 @@ import (
 )
 
 // https://adventofcode.com/2023/day/7
-func CamelCardsPartTwo() {
+func Part2() {
 	content := parseFile("07/input.txt")
 	hands := make([]Hand, len(content))
 	for i := 0; i < len(content); i++ {
@@ -20,7 +20,7 @@ func CamelCardsPartTwo() {
 	cv := maps.Clone(cardValues)
 	cv['J'] = 1
 	winnings := winings(hands, cv)
-	fmt.Println(winnings)
+	fmt.Println("Part 2:", winnings)
 }
 
 // The hand strength is defined as the sum of the

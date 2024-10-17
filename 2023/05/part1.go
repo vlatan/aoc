@@ -3,7 +3,7 @@ package day05
 import "fmt"
 
 // https://adventofcode.com/2023/day/5
-func SeedPartOne() {
+func Part1() {
 	seeds, maps := parseFile("05/input.txt")
 	minLoc := 1<<63 - 1
 	for _, s := range seeds {
@@ -12,7 +12,7 @@ func SeedPartOne() {
 		}
 		minLoc = min(minLoc, s)
 	}
-	fmt.Println(minLoc)
+	fmt.Println("Part 1:", minLoc)
 }
 
 func (m Map) Convert(num int) int {

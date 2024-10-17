@@ -7,7 +7,7 @@ func Part2() {
 	matrix, startNode := parseFile("10/input.txt")
 	loop := findLoop(startNode)
 	result := castRays(matrix, loop)
-	fmt.Println(result)
+	fmt.Println("Part 2:", result)
 }
 
 // Count points enclosed by the loop

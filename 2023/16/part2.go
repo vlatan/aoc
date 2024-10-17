@@ -20,7 +20,7 @@ func Part2() {
 		}
 	}
 
-	fmt.Println(result)
+	fmt.Println("Part 2:", result)
 }
 
 // Find starting points on the matrix

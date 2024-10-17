@@ -27,7 +27,7 @@ func Part2() {
 		}
 	}
 
-	fmt.Println(focusPower(hashmap))
+	fmt.Println("Part 2:", focusPower(hashmap))
 }
 
 func (b *Box) Remove(name string) {

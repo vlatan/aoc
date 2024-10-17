@@ -6,7 +6,7 @@ import (
 )
 
 // https://adventofcode.com/2023/day/6
-func WaitForItPartOne() {
+func Part1() {
 	times, distances := parseFile("06/input.txt")
 	result := 1
 	for i, t := range times {
@@ -19,5 +19,5 @@ func WaitForItPartOne() {
 		}
 		result *= count
 	}
-	fmt.Println(result)
+	fmt.Println("Part 1:", result)
 }

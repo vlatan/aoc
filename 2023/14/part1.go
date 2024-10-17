@@ -6,5 +6,5 @@ import "fmt"
 func Part1() {
 	matrix := parseFile("14/input.txt")
 	matrix.North()
-	fmt.Println(matrix.Count())
+	fmt.Println("Part 1:", matrix.Count())
 }

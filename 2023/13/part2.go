@@ -12,7 +12,7 @@ func Part2() {
 		curr := calcRows(data[i], transposed[i], -1)
 		result += fixSmudge(data[i], transposed[i], curr)
 	}
-	fmt.Println(result)
+	fmt.Println("Part 2:", result)
 }
 
 func fixSmudge(p, t Pattern, curr int) int {

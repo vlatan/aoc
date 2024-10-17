@@ -11,7 +11,7 @@ func Part2() {
 	for range minRange(matrix, 1_000_000_000) {
 		matrix.Cycle()
 	}
-	fmt.Println(matrix.Count())
+	fmt.Println("Part 2:", matrix.Count())
 }
 
 func minRange(m Matrix, bound int) int {

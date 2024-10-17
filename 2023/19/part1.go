@@ -13,7 +13,7 @@ func Part1() {
 	for _, rating := range ratings {
 		result += solve("in", workflows, rating)
 	}
-	fmt.Println(result)
+	fmt.Println("Part 1:", result)
 }
 
 func solve(start string, workflows Workflows, rating Rating) int {

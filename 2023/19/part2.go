@@ -20,7 +20,7 @@ func Part2() {
 	sr := Range{1, 4000}
 	state := RatingState{"x": sr, "m": sr, "a": sr, "s": sr}
 	result := solve2("in", workflows, state)
-	fmt.Println(result)
+	fmt.Println("Part 2:", result)
 }
 
 func solve2(start string, workflows Workflows, state RatingState) int {

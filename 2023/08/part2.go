@@ -3,7 +3,7 @@ package day08
 import "fmt"
 
 // https://adventofcode.com/2023/day/8
-func HauntedWastelandPartTwo() {
+func Part2() {
 	commands, graph := parseFile("08/input.txt")
 
 	currentNodes := []string{}
@@ -24,7 +24,7 @@ func HauntedWastelandPartTwo() {
 				}
 			}
 			if allDone(steps) {
-				fmt.Println(lcmm(steps))
+				fmt.Println("Part 2:", lcmm(steps))
 				return
 			}
 			count++

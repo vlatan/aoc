@@ -22,7 +22,7 @@ func Part2() {
 			history = current
 		}
 	}
-	fmt.Println(result)
+	fmt.Println("Part 2:", result)
 }
 
 func substractBackwards(lst []int) int {
