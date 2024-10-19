@@ -6,9 +6,9 @@ import (
 
 type Points map[P]struct{}
 
+// https://adventofcode.com/2023/day/21
 func Part1() {
 	start, matrix := parseFile("21/input.txt")
-
 	points := Points{start: struct{}{}}
 	for range 64 {
 		points = walk(points, matrix)
@@ -19,7 +19,7 @@ func Part1() {
 func walk(points Points, matrix M) Points {
 	r := make(Points)
 	for point := range points {
-		// step around
+		// steps around
 		around := []P{
 			{point.x, point.y - 1},
 			{point.x, point.y + 1},
@@ -27,15 +27,10 @@ func walk(points Points, matrix M) Points {
 			{point.x + 1, point.y},
 		}
 
+		// check around
 		for _, p := range around {
-			// check the bounds
-			if p.x < 0 || p.x > len(matrix)-1 ||
-				p.y < 0 || p.y > len(matrix[0])-1 {
-				continue
-			}
-
 			// check if a garden plot
-			if matrix[p.x][p.y] == '.' {
+			if value, ok := matrix[p]; ok && value == '.' {
 				r[p] = struct{}{}
 			}
 		}

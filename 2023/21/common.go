@@ -7,25 +7,23 @@ import (
 )
 
 type P struct{ x, y int }
-type M [][]byte
+type M map[P]byte
 
 func parseFile(path string) (start P, matrix M) {
 	file, err := os.Open(path)
 	common.Check(err)
 	defer file.Close()
 	scanner, matrix := bufio.NewScanner(file), M{}
-	for i := 0; scanner.Scan(); i++ {
+	for r := 0; scanner.Scan(); r++ {
 		line := scanner.Text()
-		row := make([]byte, len(line))
-		for j := 0; j < len(line); j++ {
-			if line[j] == 'S' {
-				start = P{i, j}
-				row[j] = '.'
+		for c := 0; c < len(line); c++ {
+			if line[c] == 'S' {
+				start = P{r, c}
+				matrix[start] = '.'
 				continue
 			}
-			row[j] = line[j]
+			matrix[P{r, c}] = line[c]
 		}
-		matrix = append(matrix, row)
 	}
 	return
 }

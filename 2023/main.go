@@ -165,5 +165,4 @@ func main() {
 	// https://adventofcode.com/2023/day/21
 	fmt.Println("Day 21: Step Counter")
 	day21.Part1()
-	// day21.Part2()
 }
